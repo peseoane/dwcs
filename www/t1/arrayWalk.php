@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>array_walk()</title>
+    <link rel="stylesheet" href="../bootstrap.css">
 </head>
 
 <?php
@@ -26,6 +27,7 @@ class Alumno
         if (property_exists($this, $propiedad)) {
             return $this->$propiedad;
         }
+        return null;
     }
 
     public function __set($propiedad, $valor)
@@ -74,7 +76,7 @@ function subirNotas(array &$alumnos, string $nombre): void
 
 ?>
 
-<body>
+<body class="container" >
 <h1>array_walk()</h1>
 <article>
     <h2>Crear un array de 4 objetos tipo Alumno</h2>

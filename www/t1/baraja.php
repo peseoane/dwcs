@@ -42,7 +42,7 @@ $baraja->shuffleDeck();
     <meta charset="UTF-8">
     <meta name="author" content="Seoane Prado, Pedro Vicente">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./bootstrap.css">
+    <link rel="stylesheet" href="../bootstrap.css">
     <title>Baraja de cartas</title>
 </head>
 
