@@ -2,10 +2,10 @@ version: '3'
 services:
   php:
     container_name: dwcs-php
-    image: phpstorm/php-apache:8.2-xdebug3.2
-    # build:
-    #      context: .
-    #      dockerfile: ./Dockerfile
+    #image: phpstorm/php-apache:8.2-xdebug3.2
+    build:
+         context: .
+         dockerfile: Dockerfile
     hostname: php82-xdebug32
     volumes:
       - ./config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
