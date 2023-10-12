@@ -24,6 +24,16 @@ El resto del fichero, al estar basada la imagen en Debian nos actualiza usando u
 
 La única peculiaridad es que para sistemas UNIX like es necesario que se resuelva el `"host.docker.internal:host-gateway` para que sepa xdebug a donde mandar sus peticiones.
 
+> Este fichero monta de la carpeta local config el `php.ini`, cualquier cambio en el fichero, habrá que reconstruir el contenedor (es más rápido a entrar y reiniciar el servicio no es que docker no actualice en el target el fichero si no que systemd requiere que reiniciemos el servicio y no estamos para eso habiendo opciones más rápidas)
+>
+> `docker-compose up --force-recreate --build -d`
+>
+> Al tirarlo con -d (detach), pulsando hacia arriba e intro nos lo volverá a reconstruir mucho más rápido, salvo que necesites ver el log.
+>
+> Y eso ya nos tiene en cuenta borrar el viejo y adaptar el nuevo.
+>
+> Los ficheros es un bindmount que al no dependender de un servicio, los cambios van en tiempo real.
+
 ```yaml
 version: '3'
 services:
@@ -71,3 +81,17 @@ Luego, hay que decirle que ese intérprete, es nuestro servidor, que en nuestro 
 Por último hay que decirle que espere conexiones del depurador por el puerto que dijimos, el 9003.
 
 ![Captura de pantalla 2023-10-12 120346](README.assets/Captura%20de%20pantalla%202023-10-12%20120346.png)
+
+## Como se usa
+
+Abres localhost:8080 y navegas a la página deseada.
+
+Si pones un breakpoint o lo que sea en el fichero de destino, saltará.
+
+![image-20231012122923231](README.assets/image-20231012122923231.png)
+
+## Navegador
+
+En `index.php`, es decir localhost:8080/ hay un pequeño script que nos sirve para navegar por el fs.
+
+![image-20231012123006242](README.assets/image-20231012123006242.png)
