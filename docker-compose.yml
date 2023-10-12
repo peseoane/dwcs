@@ -1,0 +1,28 @@
+version: '3'
+services:
+  php:
+    container_name: dwcs-php
+    image: phpstorm/php-apache:8.2-xdebug3.2
+    # build:
+    #      context: .
+    #      dockerfile: ./Dockerfile
+    hostname: php82-xdebug32
+    volumes:
+      - ./config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+      - ./config/php.ini:/usr/local/etc/php/php.ini
+      - './www/:/var/www/html'
+    ports:
+      - "8080:80"
+    working_dir: /var/www/html
+    environment:
+      XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9003 remote_enable=1
+    networks:
+      - dwcs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  dwcs:
+    driver: bridge
+volumes:
+  dwcs-db:

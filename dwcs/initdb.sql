@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS 'dwcc';
+CREATE DATABASE 'dwcc';
+USE 'dwcc';
