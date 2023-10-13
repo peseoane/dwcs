@@ -18,10 +18,29 @@ services:
       XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9003 remote_enable=1
     networks:
       - dwcs
+      - dwcsLan
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  mysql:
+    container_name: dwcs-mysql
+    image: mysql:8.0
+    hostname: mysql8
+    volumes:
+      - dwcs-db:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dwcs
+      MYSQL_USER: dwcs
+      MYSQL_PASSWORD: dwcs
+    networks:
+      - dwcsLan
+
 networks:
+  dwcsLan:
+    internal: true
   dwcs:
     driver: bridge
 volumes:
