@@ -86,7 +86,12 @@
   </component>
   <component name="PhpProjectServersManager">
     <servers>
-      <server host="localhost" id="d54fa227-e5dc-4f71-849f-431ca579deaf" name="docker" port="8080" use_path_mappings="true">
+      <server host="localhost" id="d54fa227-e5dc-4f71-849f-431ca579deaf" name="php82" port="8080" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$/www" remote-root="/var/www/html" />
+        </path_mappings>
+      </server>
+      <server host="localhost" id="6a956c05-0d89-4099-a0d4-3699851eafad" name="php74" port="8081" use_path_mappings="true">
         <path_mappings>
           <mapping local-root="$PROJECT_DIR$/www" remote-root="/var/www/html" />
         </path_mappings>
