@@ -39,6 +39,9 @@ services:
       XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9003 remote_enable=1
     networks:
       - dwcs
+    # wait to php8 to be ready
+    depends_on:
+      - php8
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
