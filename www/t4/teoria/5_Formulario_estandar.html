@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Formulario estándar</title>		
+        <meta charset = "UTF-8">
+    </head>
+    <body>
+        <form method="post" action="5_procesado_Formulario_estandar.php">
+            <label for = "nombre">Nombre:</label>
+            <input type="text" name="nombre" id="nombre">
+            <br><label for = "modulos">Módulos que estudia:</label>
+            <select name="modulos[]" size="3" id=modulos multiple="multiple">
+                <option selected="selected" value="DWCS">Desarrollo web en entorno servidor</option>
+                <option value="DWCC">Desarrollo web en entorno cliente</option>
+                <option value="BBDD">Bases de datos</option>
+            </select>
+            <br><br>
+            <input type="submit" value="Registrar">
+            <input type="reset" value="Borrar">
+        </form>
+    </body>
+</html>

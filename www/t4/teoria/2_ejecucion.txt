@@ -1,0 +1,1 @@
+localhost/Formularios/2_hola_comprobacion.php?nombre="Ana"

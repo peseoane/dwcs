@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Envío de varios ficheros</title>		
+        <meta charset = "UTF-8">
+    </head>
+    <body>
+        <form enctype="multipart/form-data" action="7_procesado_Envio_varios_ficherosB.php" method="POST">
+            <p>Ficheiros a enviar: </p>
+            <input name="imagen[]" type="file" /><br />
+            <input name="imagen[]" type="file" /><br />
+            <input name="imagen[]" type="file" /><br /><br />
+            <input type="submit" value="Enviar" />
+        </form>
+    </body>
+</html>
