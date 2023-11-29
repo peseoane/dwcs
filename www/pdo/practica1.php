@@ -16,7 +16,9 @@ try {
     exit;
 }
 
-$sql = "SELECT receta.*, chef.nombre AS chef_name FROM receta LEFT JOIN chef ON receta.cod_chef = chef.codigo";
+$sql = "SELECT  receta.*,
+                chef.nombre AS chef_name
+        FROM receta LEFT JOIN chef ON receta.cod_chef = chef.codigo";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $recetas = $stmt->fetchAll(PDO::FETCH_ASSOC);
