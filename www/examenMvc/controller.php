@@ -18,7 +18,7 @@ class Controller
     public function __construct()
     {
         $this->generarForm = new View();
-        $this->database = new Database('localhost', 'root', '', 'test_db');
+        $this->database = new Database();
         $this->formData = $_POST;
     }
 
