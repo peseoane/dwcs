@@ -16,11 +16,6 @@ class Database
         $this->connect();
     }
 
-    public function dump(): void
-    {
-        var_dump($this->connection);
-    }
-
     private function connect(): void
     {
         try {
@@ -31,11 +26,9 @@ class Database
         }
     }
 
-    private function ensureConnection(): void
+    public function dump(): void
     {
-        if (!isset($this->connection)) {
-            $this->connect();
-        }
+        var_dump($this->connection);
     }
 
     public function deleteAllUserInformation(): void
@@ -46,6 +39,13 @@ class Database
             $this->connection->exec("DELETE FROM users");
         } catch (PDOException $e) {
             echo $e->getMessage();
+        }
+    }
+
+    private function ensureConnection(): void
+    {
+        if (!isset($this->connection)) {
+            $this->connect();
         }
     }
 
@@ -84,6 +84,7 @@ class Database
         }
     }
 
+
     public function createTable(): void
     {
         $this->ensureConnection();
@@ -91,15 +92,17 @@ class Database
         try {
             $this->connection->exec("CREATE TABLE IF NOT EXISTS users (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                username VARCHAR(30) NOT NULL,
-                password VARCHAR(255) NOT NULL
+                username VARCHAR(30) NOT NULL UNIQUE ,
+                password VARCHAR(255) NOT NULL UNIQUE ,
+                dob DATE NOT NULL,
+                file_path VARCHAR(255)
             )");
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
     }
 
-    public function addUser(string $username, string $password): void
+    public function loginUser(string $username, string $password): void
     {
         $this->ensureConnection();
 
@@ -113,6 +116,25 @@ class Database
             echo $e->getMessage();
         }
     }
+
+    public function addUser(string $username, string $password, string $dob, ?string $filePath): void
+    {
+        $this->ensureConnection();
+
+        try {
+            $stmt = $this->connection->prepare("INSERT INTO users (username, password, dob, file_path) VALUES (:username, :password, :dob, :file_path)");
+            $stmt->bindParam(':username', $username);
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt->bindParam(':password', $passwordHash);
+            $stmt->bindParam(':dob', $dob);
+            $stmt->bindParam(':file_path', $filePath);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
 
     public function checkPassword(string $username, string $password): bool
     {
@@ -141,12 +163,9 @@ class Database
         $this->ensureConnection();
 
         try {
-            $stmt = $this->connection->prepare("SELECT username, password FROM users");
+            $stmt = $this->connection->prepare("SELECT * FROM users");
             $stmt->execute();
-
-            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            return $rows;
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo $e->getMessage();
             return [];

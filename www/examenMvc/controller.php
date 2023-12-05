@@ -50,14 +50,12 @@ class Controller
                 $this->database->createTable();
             }
 
-            if (!$this->database->checkPassword($username, $password)) {
-                $this->database->addUser($username, $password);
-                echo 'User added';
+            if ($this->database->checkPassword($username, $password)) {
+                echo 'Credentials are correct.';
             } else {
-                echo 'User already exists, please register down bellow.';
+                echo 'Credentials are incorrect or user does not exist.';
             }
         }
-
 
         if (isset($this->formData['name'], $this->formData['surname'], $this->formData['dob'], $_FILES['file'])) {
             $username = $this->formData['name'];
@@ -65,23 +63,23 @@ class Controller
             $dob = $this->formData['dob'];
             $file = $_FILES['file'];
 
-            // Validate date of birth
             $dobDateTime = DateTime::createFromFormat('Y-m-d', $dob);
             if ($dobDateTime && $dobDateTime->format('Y-m-d') === $dob) {
-                // Handle file upload if a file was provided
+                $tmpFilePath = null;
                 if ($file['error'] === UPLOAD_ERR_OK) {
-                    $uploadDirectory = '/path/to/upload/directory/';
-                    $uploadFilePath = $uploadDirectory . basename($file['name']);
+                    $tmpFile = tmpfile();
+                    $metaData = stream_get_meta_data($tmpFile);
+                    $tmpFilePath = $metaData['uri'];
 
-                    if (move_uploaded_file($file['tmp_name'], $uploadFilePath)) {
+                    if (move_uploaded_file($file['tmp_name'], $tmpFilePath)) {
                         echo 'File uploaded successfully.';
                     } else {
                         echo 'Failed to upload file.';
+                        $tmpFilePath = null;
                     }
                 }
 
-                // Add user to database
-                $this->database->addUser($username, $surname, $dob);
+                $this->database->addUser($username, $surname, $dob, $tmpFilePath);
                 echo 'User registered successfully.';
             } else {
                 echo 'Invalid date of birth.';
@@ -89,7 +87,6 @@ class Controller
         }
 
         if (isset($this->formData['delete'])) {
-            // Logic for handling deletion form submission
             $this->database->deleteAllUserInformation();
             echo 'All user information has been deleted.';
         }

@@ -35,18 +35,18 @@ La única peculiaridad es que para sistemas UNIX like es necesario que se resuel
 > Los ficheros es un bindmount que al no dependender de un servicio, los cambios van en tiempo real.
 
 ```yaml
-version: '3'
+version: "3"
 services:
   php:
     container_name: dwcs-php
     build:
-         context: .
-         dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile
     hostname: php82-xdebug32
     volumes:
       - ./config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
       - ./config/php.ini:/usr/local/etc/php/php.ini
-      - './www/:/var/www/html'
+      - "./www/:/var/www/html"
     ports:
       - "8080:80"
     working_dir: /var/www/html
