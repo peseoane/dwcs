@@ -38,6 +38,17 @@ class Database
         }
     }
 
+    public function deleteAllUserInformation(): void
+    {
+        $this->ensureConnection();
+
+        try {
+            $this->connection->exec("DELETE FROM users");
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
     public function checkIfDbExists(): bool
     {
         $this->ensureConnection();
