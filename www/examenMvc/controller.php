@@ -57,10 +57,12 @@ class Controller
             }
         }
 
-        if (isset($this->formData['name'], $this->formData['surname'], $this->formData['dob'], $_FILES['file'])) {
+        if (isset($this->formData['name'], $this->formData['surname'], $this->formData['dob'], $this->formData['email'], $this->formData['password'], $_FILES['file'])) {
             $username = $this->formData['name'];
             $surname = $this->formData['surname'];
             $dob = $this->formData['dob'];
+            $email = $this->formData['email'];
+            $password = $this->formData['password'];
             $file = $_FILES['file'];
 
             $dobDateTime = DateTime::createFromFormat('Y-m-d', $dob);
@@ -79,8 +81,7 @@ class Controller
                     }
                 }
 
-                $this->database->addUser($username, $surname, $dob, $tmpFilePath);
-                echo 'User registered successfully.';
+                $this->database->addUser($username, $surname, $dob, $email, $password, $tmpFilePath);                echo 'User registered successfully.';
             } else {
                 echo 'Invalid date of birth.';
             }

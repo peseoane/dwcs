@@ -92,6 +92,8 @@ class Database
         try {
             $this->connection->exec("CREATE TABLE IF NOT EXISTS users (
                 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                email VARCHAR(255) NOT NULL UNIQUE ,
+                surname VARCHAR(30) NOT NULL,
                 username VARCHAR(30) NOT NULL UNIQUE ,
                 password VARCHAR(255) NOT NULL UNIQUE ,
                 dob DATE NOT NULL,
@@ -117,16 +119,18 @@ class Database
         }
     }
 
-    public function addUser(string $username, string $password, string $dob, ?string $filePath): void
+    public function addUser(string $username, string $surname, string $dob, string $email, string $password, ?string $filePath): void
     {
         $this->ensureConnection();
 
         try {
-            $stmt = $this->connection->prepare("INSERT INTO users (username, password, dob, file_path) VALUES (:username, :password, :dob, :file_path)");
+            $stmt = $this->connection->prepare("INSERT INTO users (username, surname, dob, email, password, file_path) VALUES (:username, :surname, :dob, :email, :password, :file_path)");
             $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':surname', $surname);
+            $stmt->bindParam(':dob', $dob);
+            $stmt->bindParam(':email', $email);
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $stmt->bindParam(':password', $passwordHash);
-            $stmt->bindParam(':dob', $dob);
             $stmt->bindParam(':file_path', $filePath);
 
             $stmt->execute();

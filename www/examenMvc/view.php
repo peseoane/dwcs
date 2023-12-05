@@ -13,7 +13,7 @@ class View
 
     public function renderLoginForm(): string
     {
-        $form = '<h1>SIGN-IN</h1><form method="post">';
+        $form = '<h2>SIGN-IN</h2><form method="post">';
         foreach (self::formValues as $value) {
             if ($value === 'email' || $value === 'password') {
                 $form .= '<label for="' . $value . '">' . ucfirst($value) . '</label>';
