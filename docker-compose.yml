@@ -2,14 +2,13 @@ version: '3'
 services:
   php8:
     container_name: dwcs-php8
-    #image: phpstorm/php-apache:8.2-xdebug3.2
     build:
          context: .
          dockerfile: Dockerfile
-    hostname: php82-xdebug32
+    hostname: php83-xdebug32
     volumes:
-      - ./config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
-      - ./config/php.ini:/usr/local/etc/php/php.ini
+      - './config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini'
+      - './config/php.ini:/usr/local/etc/php/php.ini'
       - './www/:/var/www/html'
     ports:
       - "8080:80"
@@ -45,7 +44,7 @@ services:
 
   mysql:
     container_name: dwcs-mysql
-    image: mysql:8.0
+    image: mysql:latest
     hostname: mysql8
     volumes:
       - dwcs-db:/var/lib/mysql
