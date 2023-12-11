@@ -19,9 +19,6 @@
 </form>
 <ul>
     <?php
-
-
-
     $numero = null;
     $numeroDoble = null;
     $numeroTriple = null;
@@ -34,8 +31,8 @@
         return pow($numeroDoble, 3);
     };
 
-    if (isset($_POST['numero'])) {
-        $numero = $_POST['numero'];
+    if (isset($_POST["numero"])) {
+        $numero = $_POST["numero"];
 
         if ($numero > PHP_FLOAT_MAX || $numero < -PHP_FLOAT_MAX) {
             echo '<div class="alert alert-danger" role="alert">
@@ -63,7 +60,6 @@
     }
 
     var_dump($numeroDoble);
-
     ?>
 </ul>
 <footer>

@@ -1,21 +1,21 @@
 <?php declare(strict_types=1);
 
 $cities = [
-    'Japón' => 'Tokio',
-    'Méjico' => 'Ciudad de Méjico',
-    'EEUU' => 'Ciudad de Nueva York',
-    'India' => 'Bombay',
-    'Corea' => 'Seúl',
-    'China' => 'Shanghái',
-    'Nigeria' => 'Lagos',
-    'Argentina' => 'Buenos Aires',
-    'Egipto' => 'Cairo',
-    'Gran Bretaña' => 'Londres'
+    "Japón" => "Tokio",
+    "Méjico" => "Ciudad de Méjico",
+    "EEUU" => "Ciudad de Nueva York",
+    "India" => "Bombay",
+    "Corea" => "Seúl",
+    "China" => "Shanghái",
+    "Nigeria" => "Lagos",
+    "Argentina" => "Buenos Aires",
+    "Egipto" => "Cairo",
+    "Gran Bretaña" => "Londres",
 ];
 
 function generateOptions($array): string
 {
-    $options = '';
+    $options = "";
     foreach ($array as $country => $city) {
         $options .= "<option value='$city'>$city</option>";
     }
@@ -37,10 +37,9 @@ function generateOptions($array): string
     <input type="submit" value="Enviar">
 </form>
 
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['cities'])) {
-        $selectedCity = $_POST['cities'];
+<?php if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["cities"])) {
+        $selectedCity = $_POST["cities"];
 
         $selectedCountry = array_search($selectedCity, $cities);
 
@@ -50,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "No se encontró el país para la ciudad seleccionada.";
         }
     }
-}
-?>
+} ?>
 </body>
 </html>

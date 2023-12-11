@@ -23,8 +23,7 @@
     <input type="submit" value="Convertir">
 </form>
 
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+<?php if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cantidad = $_POST["cantidad"];
     $moneda_origen = $_POST["moneda_origen"];
     $api_key = "dddcf7f251341a0381eaacc8";
@@ -33,14 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $response = file_get_contents($api_url);
     $data = json_decode($response, true);
 
-    if ($data && $data['result'] == 'success') {
-        if ($moneda_origen === 'USD') {
-            $exchange_rate = $data['conversion_rates']['EUR'];
-            $moneda_destino = 'EUR';
+    if ($data && $data["result"] == "success") {
+        if ($moneda_origen === "USD") {
+            $exchange_rate = $data["conversion_rates"]["EUR"];
+            $moneda_destino = "EUR";
             $cantidad_convertida = $cantidad * $exchange_rate;
         } else {
-            $exchange_rate = $data['conversion_rates']['USD'];
-            $moneda_destino = 'USD';
+            $exchange_rate = $data["conversion_rates"]["USD"];
+            $moneda_destino = "USD";
             $cantidad_convertida = $cantidad * $exchange_rate;
         }
 
@@ -48,7 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "<p>Error al obtener la tasa de cambio. Por favor, inténtelo nuevamente más tarde.</p>";
     }
-}
-?>
+} ?>
 </body>
 </html>

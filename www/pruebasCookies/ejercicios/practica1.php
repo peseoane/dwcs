@@ -4,23 +4,29 @@ declare(strict_types=1);
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $cookieName = $_POST['cookieName'] ?? null;
-    $cookieValue = $_POST['cookieValue'] ?? null;
-    $cookieLifespan = !empty($_POST['cookieLifespan']) ? $_POST['cookieLifespan'] : 30;
+    $cookieName = $_POST["cookieName"] ?? null;
+    $cookieValue = $_POST["cookieValue"] ?? null;
+    $cookieLifespan = !empty($_POST["cookieLifespan"])
+        ? $_POST["cookieLifespan"]
+        : 30;
 
-    if (!empty($cookieName) && !empty($cookieValue) && !empty($cookieLifespan)) {
-        $expiration = time() + (int)$cookieLifespan;
+    if (
+        !empty($cookieName) &&
+        !empty($cookieValue) &&
+        !empty($cookieLifespan)
+    ) {
+        $expiration = time() + (int) $cookieLifespan;
         setcookie($cookieName, $cookieValue, $expiration);
         header("Location: practica1.php");
-        exit;
+        exit();
     }
 
-    if (isset($_POST['deleteCookies'])) {
+    if (isset($_POST["deleteCookies"])) {
         foreach ($_COOKIE as $name => $value) {
-            setcookie($name, '', time() - 3600);
+            setcookie($name, "", time() - 3600);
         }
         header("Location: practica1.php");
-        exit;
+        exit();
     }
 }
 ?>
@@ -37,11 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <h2>Current Cookies</h2>
 <ul>
-    <?php
-    foreach ($_COOKIE as $name => $value) {
-        echo '<li>' . htmlspecialchars($name) . ': ' . htmlspecialchars($value) . '</li>';
-    }
-    ?>
+    <?php foreach ($_COOKIE as $name => $value) {
+        echo "<li>" .
+            htmlspecialchars($name) .
+            ": " .
+            htmlspecialchars($value) .
+            "</li>";
+    } ?>
 </ul>
 
 <h2>Add a New Cookie</h2>

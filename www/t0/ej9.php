@@ -17,18 +17,16 @@
     <input type="submit" value="Verificar">
 </form>
 
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+<?php if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $numero_decimal = $_POST["numero_decimal"];
 
-    $numero_decimal = str_replace(',', '.', $numero_decimal);
+    $numero_decimal = str_replace(",", ".", $numero_decimal);
 
-    if (is_numeric($numero_decimal) && strpos($numero_decimal, '.') !== false) {
+    if (is_numeric($numero_decimal) && strpos($numero_decimal, ".") !== false) {
         echo "<p>El número ingresado ($numero_decimal) es de tipo decimal (coma flotante).</p>";
     } else {
         echo "<p>El número ingresado ($numero_decimal) no es de tipo decimal (coma flotante).</p>";
     }
-}
-?>
+} ?>
 </body>
 </html>

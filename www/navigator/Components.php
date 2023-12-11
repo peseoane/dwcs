@@ -2,7 +2,10 @@
 
 class Document
 {
-    public static function generateBoilerplate(string $title, string $description): string {
+    public static function generateBoilerplate(
+        string $title,
+        string $description
+    ): string {
         $boilerplate = "<!DOCTYPE html>
 <html lang='en'>
 <head>
@@ -29,12 +32,12 @@ class Document
 
     public static function generateContainerEnd(): string
     {
-        return '</div>';
+        return "</div>";
     }
 
     public static function closeDocument(): string
     {
-        return '</body></html>';
+        return "</body></html>";
     }
 }
 
@@ -51,15 +54,25 @@ class Form
 
     public function generateForm(): string
     {
-        $form = '<form class="form-group" action="' . $this->target . '" method="post">';
+        $form =
+            '<form class="form-group" action="' .
+            $this->target .
+            '" method="post">';
 
         foreach ($this->config as $key => $value) {
-            $form .= '<label for="' . $key . '">' . $key . '</label>';
-            $form .= '<input type="text" id="' . $key . '" name="' . $key . '" value="' . $value . '"><br>';
+            $form .= '<label for="' . $key . '">' . $key . "</label>";
+            $form .=
+                '<input type="text" id="' .
+                $key .
+                '" name="' .
+                $key .
+                '" value="' .
+                $value .
+                '"><br>';
         }
 
         $form .= '<input type="submit" value="Submit">';
-        $form .= '</form>';
+        $form .= "</form>";
 
         return $form;
     }

@@ -5,4 +5,3 @@ if (empty($_GET["nombre"])) {
 } else {
     echo "Hola " . $_GET["nombre"];
 }
-	

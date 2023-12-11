@@ -1,55 +1,58 @@
 <?php
 
-    class Alumno {
-        private $nombre;
-        private $apellidos;
-        private $notas = array();
+class Alumno
+{
+    private $nombre;
+    private $apellidos;
+    private $notas = [];
 
-        public function __construct($nombre, $apellidos, $notas) {
-            $this->nombre = $nombre;
-            $this->apellidos = $apellidos;
-            $this->notas = $notas;
-        }
-
-        public function __get($nombre){
-            if (property_exists($this, $nombre));
-            return $this->$nombre;
-        }
-
-        public function __set($nombre, $valor){
-            if (property_exists($this, $nombre));
-            $this->$nombre = $valor;
-        }
+    public function __construct($nombre, $apellidos, $notas)
+    {
+        $this->nombre = $nombre;
+        $this->apellidos = $apellidos;
+        $this->notas = $notas;
     }
 
-    function sumArray($obj){
+    public function __get($nombre)
+    {
+        if (property_exists($this, $nombre));
+        return $this->$nombre;
+    }
 
-        if($obj->__get('nombre') == 'Pepe'){
+    public function __set($nombre, $valor)
+    {
+        if (property_exists($this, $nombre));
+        $this->$nombre = $valor;
+    }
+}
 
-            $myArray = $obj->__get('notas');
+function sumArray($obj)
+{
+    if ($obj->__get("nombre") == "Pepe") {
+        $myArray = $obj->__get("notas");
 
-            $count = count($myArray);
+        $count = count($myArray);
 
-            for ($i = 0; $i < $count; $i++){
-                $myArray[$i] = $myArray[$i] + 1;
-            }
-            
-            $obj->__set('notas',$myArray);
+        for ($i = 0; $i < $count; $i++) {
+            $myArray[$i] = $myArray[$i] + 1;
         }
-    };
-    
-    $Manolo = new Alumno('Manolo', 'Perez', array(5,3,4));
-    $Pepe = new Alumno('Pepe','Martinez',array(1,3,2));
-    $Maria = new Alumno('Maria','Alvarez',array(9,7,5));
-    $Francisco = new Alumno('Francisco','Alvarez',array(4,6,3));
 
-    $alumnos = array($Manolo,$Pepe,$Maria,$Francisco);
+        $obj->__set("notas", $myArray);
+    }
+}
 
-    array_walk($alumnos,'sumArray');
+$Manolo = new Alumno("Manolo", "Perez", [5, 3, 4]);
+$Pepe = new Alumno("Pepe", "Martinez", [1, 3, 2]);
+$Maria = new Alumno("Maria", "Alvarez", [9, 7, 5]);
+$Francisco = new Alumno("Francisco", "Alvarez", [4, 6, 3]);
 
-    echo implode(',',$Manolo->__get('notas')).'<br>';
-    echo implode(',',$Pepe->__get('notas')).'<br>';
-    echo implode(',',$Maria->__get('notas')).'<br>';
-    echo implode(',',$Francisco->__get('notas')).'<br>';
+$alumnos = [$Manolo, $Pepe, $Maria, $Francisco];
+
+array_walk($alumnos, "sumArray");
+
+echo implode(",", $Manolo->__get("notas")) . "<br>";
+echo implode(",", $Pepe->__get("notas")) . "<br>";
+echo implode(",", $Maria->__get("notas")) . "<br>";
+echo implode(",", $Francisco->__get("notas")) . "<br>";
 
 ?>

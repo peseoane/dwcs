@@ -3,28 +3,28 @@ declare(strict_types=1);
 
 session_start();
 
-$preferences = $_COOKIE['preferences'] ?? null;
+$preferences = $_COOKIE["preferences"] ?? null;
 
-$seatOptions = ['aisle', 'window', 'center'];
-$menuOptions = ['vegetarian', 'non-vegetarian', 'diabetic', 'child'];
-$airportOptions = ['LHR', 'CDG', 'CIA', 'IBZ', 'SIN', 'HKG', 'MLA', 'BOM'];
+$seatOptions = ["aisle", "window", "center"];
+$menuOptions = ["vegetarian", "non-vegetarian", "diabetic", "child"];
+$airportOptions = ["LHR", "CDG", "CIA", "IBZ", "SIN", "HKG", "MLA", "BOM"];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $name = $_POST['name'] ?? null;
-    $seat = $_POST['seat'] ?? null;
-    $menu = $_POST['menu'] ?? null;
-    $airports = $_POST['airports'] ?? [];
+    $name = $_POST["name"] ?? null;
+    $seat = $_POST["seat"] ?? null;
+    $menu = $_POST["menu"] ?? null;
+    $airports = $_POST["airports"] ?? [];
 
     $preferences = [
-        'name' => $name,
-        'seat' => $seat,
-        'menu' => $menu,
-        'airports' => $airports,
+        "name" => $name,
+        "seat" => $seat,
+        "menu" => $menu,
+        "airports" => $airports,
     ];
 
-    setcookie('preferences', json_encode($preferences), time() + (86400 * 30)); // 86400 = 1 day
+    setcookie("preferences", json_encode($preferences), time() + 86400 * 30); // 86400 = 1 day
     header("Location: practica3.php");
-    exit;
+    exit();
 }
 
 $preferences = $preferences ? json_decode($preferences, true) : [];
@@ -59,13 +59,18 @@ $preferences = $preferences ? json_decode($preferences, true) : [];
 <form method="post" action="">
     <label>
         Name:
-        <input type="text" name="name" value="<?= $preferences['name'] ?? '' ?>">
+        <input type="text" name="name" value="<?= $preferences["name"] ??
+            "" ?>">
     </label>
     <label>
         Seat:
         <select name="seat">
             <?php foreach ($seatOptions as $option): ?>
-                <option value="<?= $option ?>" <?= ($preferences['seat'] ?? '') === $option ? 'selected' : '' ?>><?= ucfirst($option) ?></option>
+                <option value="<?= $option ?>" <?= ($preferences["seat"] ??
+    "") ===
+$option
+    ? "selected"
+    : "" ?>><?= ucfirst($option) ?></option>
             <?php endforeach; ?>
         </select>
     </label>
@@ -73,14 +78,23 @@ $preferences = $preferences ? json_decode($preferences, true) : [];
         Menu:
         <select name="menu">
             <?php foreach ($menuOptions as $option): ?>
-                <option value="<?= $option ?>" <?= ($preferences['menu'] ?? '') === $option ? 'selected' : '' ?>><?= ucfirst($option) ?></option>
+                <option value="<?= $option ?>" <?= ($preferences["menu"] ??
+    "") ===
+$option
+    ? "selected"
+    : "" ?>><?= ucfirst($option) ?></option>
             <?php endforeach; ?>
         </select>
     </label>
     <label>
         Airports:
         <?php foreach ($airportOptions as $option): ?>
-            <input type="checkbox" name="airports[]" value="<?= $option ?>" <?= in_array($option, $preferences['airports'] ?? []) ? 'checked' : '' ?>><?= $option ?>
+            <input type="checkbox" name="airports[]" value="<?= $option ?>" <?= in_array(
+    $option,
+    $preferences["airports"] ?? []
+)
+    ? "checked"
+    : "" ?>><?= $option ?>
         <?php endforeach; ?>
     </label>
     <input type="submit" value="Save Preferences">

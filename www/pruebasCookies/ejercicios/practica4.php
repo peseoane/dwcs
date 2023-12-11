@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 session_start();
 
-if (!isset($_SESSION['visits'])) {
-    $_SESSION['visits'] = [];
+if (!isset($_SESSION["visits"])) {
+    $_SESSION["visits"] = [];
 }
 
-$_SESSION['visits'][] = date('Y-m-d H:i:s');
+$_SESSION["visits"][] = date("Y-m-d H:i:s");
 
-$visits = $_SESSION['visits'];
+$visits = $_SESSION["visits"];
 ?>
 
 <!DOCTYPE html>

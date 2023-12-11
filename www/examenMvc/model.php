@@ -3,26 +3,32 @@ declare(strict_types=1);
 
 class Database
 {
-    private const DATABASE_NAME = 'dwcs';
-    private const USER = 'root';
-    private const PASSWORD = 'root';
-    private const HOST = 'mysql';
-    private const DSN = 'mysql:host=' . self::HOST . ';dbname=' . self::DATABASE_NAME;
+    private const DATABASE_NAME = "dwcs";
+    private const USER = "root";
+    private const PASSWORD = "root";
+    private const HOST = "mysql";
+    private const DSN =
+        "mysql:host=" . self::HOST . ";dbname=" . self::DATABASE_NAME;
 
     private PDO $connection;
 
     public function __construct()
     {
         $this->connect();
-            }
+    }
 
     private function connect(): void
     {
         try {
             $this->connection = new PDO(self::DSN, self::USER, self::PASSWORD);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connection->setAttribute(
+                PDO::ATTR_ERRMODE,
+                PDO::ERRMODE_EXCEPTION
+            );
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo '<div class="alert alert-danger" role="alert">' .
+                $e->getMessage() .
+                "</div>";
         }
     }
 
@@ -30,20 +36,20 @@ class Database
     {
         var_dump($this->connection);
     }
-
+    // Because sometimes connections just magically disappear.
+    // PHP, the master of disappearing acts.
+    // If only real magic was this unreliable.
     public function deleteAllUserInformation(): void
     {
         $this->ensureConnection();
-        // Because sometimes connections just magically disappear.
-        // PHP, the master of disappearing acts.
-        // If only real magic was this unreliable.
         try {
             $this->connection->exec("DELETE FROM users");
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo '<div class="alert alert-danger" role="alert">' .
+                $e->getMessage() .
+                "</div>";
         }
     }
-
 
     private function ensureConnection(): void
     {
@@ -66,7 +72,9 @@ class Database
         $this->ensureConnection();
 
         try {
-            $stmt = $this->connection->query("SELECT 1 FROM " . self::DATABASE_NAME . " LIMIT 1");
+            $stmt = $this->connection->query(
+                "SELECT 1 FROM " . self::DATABASE_NAME . " LIMIT 1"
+            );
             return true;
         } catch (PDOException $e) {
             return false;
@@ -78,9 +86,13 @@ class Database
         $this->ensureConnection();
 
         try {
-            $this->connection->exec("CREATE DATABASE IF NOT EXISTS " . self::DATABASE_NAME);
+            $this->connection->exec(
+                "CREATE DATABASE IF NOT EXISTS " . self::DATABASE_NAME
+            );
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo '<div class="alert alert-danger" role="alert">' .
+                $e->getMessage() .
+                "</div>";
         }
     }
 
@@ -90,12 +102,12 @@ class Database
 
         try {
             $stmt = $this->connection->query("SELECT 1 FROM users LIMIT 1");
+            $stmt->execute();
             return true;
         } catch (PDOException $e) {
             return false;
         }
     }
-
 
     public function createTable(): void
     {
@@ -112,7 +124,9 @@ class Database
                 file_path VARCHAR(255)
             )");
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo '<div class="alert alert-danger" role="alert">' .
+                $e->getMessage() .
+                "</div>";
         }
     }
 
@@ -142,61 +156,107 @@ class Database
         $this->ensureConnection();
 
         try {
-            $stmt = $this->connection->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
-            $stmt->bindParam(':username', $username);
+            $stmt = $this->connection->prepare(
+                "INSERT INTO users (username, password) VALUES (:username, :password)"
+            );
+            $stmt->bindParam(":username", $username);
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt->bindParam(':password', $passwordHash);
+            $stmt->bindParam(":password", $passwordHash);
             $stmt->execute();
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo '<div class="alert alert-danger" role="alert">' .
+                $e->getMessage() .
+                "</div>";
         }
     }
 
-
-    public function addUser(string $username, string $surname, string $dob, string $email, string $password, ?string $filePath): void
-    {
+    public function addUser(
+        string $username,
+        string $surname,
+        string $dob,
+        string $email,
+        string $password,
+        ?string $filePath
+    ): void {
         $this->ensureConnection();
 
         try {
-            $stmt = $this->connection->prepare("INSERT INTO users (username, surname, dob, email, password, file_path) VALUES (:username, :surname, :dob, :email, :password, :file_path)");
-            $stmt->bindParam(':username', $username);
-            $stmt->bindParam(':surname', $surname);
-            $stmt->bindParam(':dob', $dob);
-            $stmt->bindParam(':email', $email);
-            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt->bindParam(':password', $passwordHash);
-            $stmt->bindParam(':file_path', $filePath);
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo "<div class='alert alert-success' role='alert'>" .
+                    "$email is a valid email address (at PDO level)" .
+                    "</div>";
+                $stmt = $this->connection->prepare(
+                    "INSERT INTO users (username, surname, dob, email, password, file_path) VALUES (:username, :surname, :dob, :email, :password, :file_path)"
+                );
+                $stmt->bindParam(":username", $username);
+                $stmt->bindParam(":surname", $surname);
+                $stmt->bindParam(":dob", $dob);
+                $stmt->bindParam(":email", $email);
+                $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+                $stmt->bindParam(":password", $passwordHash);
+                $stmt->bindParam(":file_path", $filePath);
 
-            $stmt->execute();
+                $stmt->execute();
+            } else {
+                echo '<div class="alert alert-danger" role="alert">' .
+                    "$email is not a valid email address" .
+                    "</div>";
+                return;
+            }
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo '<div class="alert alert-danger" role="alert">' .
+                $e->getMessage() .
+                "</div>";
         }
     }
-
 
     public function checkPassword(string $email, string $password): bool
     {
         $this->ensureConnection();
 
         try {
-            $stmt = $this->connection->prepare("SELECT password FROM users WHERE email = :email");
-            $stmt->bindParam(':email', $email);
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo "<div class='alert alert-success' role='alert'>" .
+                    "$email is a valid email address (at checking password)" .
+                    "</div>";
+            } else {
+                echo '<div class="alert alert-danger" role="alert">' .
+                    "$email is not a valid email address" .
+                    "</div>";
+                return false;
+            }
+            $stmt = $this->connection->prepare(
+                "SELECT password FROM users WHERE email = :email"
+            );
+            $stmt->bindParam(":email", $email);
             $stmt->execute();
 
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($row && isset($row['password'])) {
-                error_log("Stored password hash: " . $row['password']);
-                error_log("Provided password hash: " . password_hash($password, PASSWORD_DEFAULT));
-                $passwordMatches = password_verify($password, $row['password']);
-                error_log("Password matches: " . var_export($passwordMatches, true));
+            if ($row && isset($row["password"])) {
+                error_log("Stored password hash: " . $row["password"]);
+                error_log(
+                    "Provided password hash: " .
+                        password_hash($password, PASSWORD_DEFAULT)
+                );
+                $passwordMatches = password_verify($password, $row["password"]);
+                error_log(
+                    "Password matches: " . var_export($passwordMatches, true)
+                );
                 return $passwordMatches;
             } else {
                 error_log("No user found with email: " . $email);
+                echo '<div class="alert alert-danger" role="alert">' .
+                    "No user found with email: " .
+                    $email .
+                    "</div>";
                 return false;
             }
         } catch (PDOException $e) {
             error_log("PDOException: " . $e->getMessage());
+            echo '<div class="alert alert-danger" role="alert">' .
+                $e->getMessage() .
+                "</div>";
             return false;
         }
     }
@@ -210,11 +270,12 @@ class Database
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            echo '<div class="alert alert-danger" role="alert">' .
+                $e->getMessage() .
+                "</div>";
             return [];
         }
     }
-
 }
 
 ?>

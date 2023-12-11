@@ -24,15 +24,16 @@
 </form>
 
 <?php
-function resolver_ecuacion_segundo_grado($a, $b, $c) {
+function resolver_ecuacion_segundo_grado($a, $b, $c)
+{
     if ($a == 0) {
-        return false;  // Será otra cosa no y=mx2+nx+p
+        return false; // Será otra cosa no y=mx2+nx+p
     }
 
     $delta = $b * $b - 4 * $a * $c;
 
     if ($delta < 0) {
-        return false;  // No vamos a ponernos con imaginarios ahora hombre...
+        return false; // No vamos a ponernos con imaginarios ahora hombre...
     } elseif ($delta == 0) {
         $solucion = -($b / (2 * $a));
         return [$solucion];
@@ -53,7 +54,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($soluciones === false) {
         echo "<p>No hay soluciones reales para la ecuación proporcionada.</p>";
     } else {
-        echo "<p>Las soluciones de la ecuación son: " . implode(", ", $soluciones) . "</p>";
+        echo "<p>Las soluciones de la ecuación son: " .
+            implode(", ", $soluciones) .
+            "</p>";
     }
 }
 ?>

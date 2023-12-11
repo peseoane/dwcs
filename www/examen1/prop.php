@@ -5,8 +5,10 @@ class CuentaBancaria
     private array $pesoEntidadSucursal;
     private array $pesoNumCuenta;
 
-    public function __construct(array $pesoEntidadSucursal, array $pesoNumCuenta)
-    {
+    public function __construct(
+        array $pesoEntidadSucursal,
+        array $pesoNumCuenta
+    ) {
         $this->pesoEntidadSucursal = $pesoEntidadSucursal;
         $this->pesoNumCuenta = $pesoNumCuenta;
     }
@@ -15,7 +17,10 @@ class CuentaBancaria
     {
         $numCuenta = array_slice($cuenta, 10, 10);
 
-        $digitoControlNumCuenta = $this->calcularDigitoControl($numCuenta, $this->pesoNumCuenta);
+        $digitoControlNumCuenta = $this->calcularDigitoControl(
+            $numCuenta,
+            $this->pesoNumCuenta
+        );
 
         return $cuenta[9] == $digitoControlNumCuenta;
     }
@@ -24,13 +29,13 @@ class CuentaBancaria
     {
         $sumaPonderada = 0;
         foreach ($parteCuenta as $key => $digito) {
-            $sumaPonderada += $digito * (int)$peso[$key];
+            $sumaPonderada += $digito * (int) $peso[$key];
         }
 
         $resto = $sumaPonderada % 11;
         $resultado = 11 - $resto;
 
-        return ($resultado == 11 || $resultado == 10) ? 0 : $resultado;
+        return $resultado == 11 || $resultado == 10 ? 0 : $resultado;
     }
 }
 

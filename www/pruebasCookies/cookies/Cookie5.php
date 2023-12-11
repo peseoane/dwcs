@@ -6,9 +6,9 @@
  * A continuación ejecutar el fichero Cookie2.php, el cual creará la cookie usuario
  * y volver a ejecutar este fichero. Veremos como esta vez el mensaje cambia
  */
-if (isset($_COOKIE['usuario']))
-    echo 'Hola de nuevo, ' . $_COOKIE['usuario'];
-else
-    echo 'Bienvenido nuevo usuario';
-?> 
+if (isset($_COOKIE["usuario"])) {
+    echo "Hola de nuevo, " . $_COOKIE["usuario"];
+} else {
+    echo "Bienvenido nuevo usuario";
+} ?> 
 

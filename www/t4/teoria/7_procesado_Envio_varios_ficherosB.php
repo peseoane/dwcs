@@ -1,3 +1,3 @@
 <?php
 
-var_dump($_FILES['imagen']);
+var_dump($_FILES["imagen"]);

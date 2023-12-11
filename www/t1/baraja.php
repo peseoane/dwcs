@@ -12,7 +12,7 @@ class Baraja
 
     private function loadDeck(): void
     {
-        $cardFiles = glob($this->path . '*.png');
+        $cardFiles = glob($this->path . "*.png");
         foreach ($cardFiles as $cardFile) {
             $this->cartas[] = $cardFile;
         }
@@ -33,7 +33,6 @@ class Baraja
 
 $baraja = new Baraja();
 $baraja->shuffleDeck();
-
 ?>
 
 <!DOCTYPE html>
@@ -64,9 +63,7 @@ $baraja->shuffleDeck();
             <button class="btn btn-primary" onclick="window.location.reload()">Barajar</button>
         </div>
         <div class="container p-4">
-            <?php
-            $baraja->SsrHtmlShuffleDeck();
-            ?>
+            <?php $baraja->SsrHtmlShuffleDeck(); ?>
         </div>
     </section>
 </article>

@@ -19,7 +19,8 @@
     </form>
 
     <?php
-    function es_palindromo($cadena) {
+    function es_palindromo($cadena)
+    {
         $cadena_invertida = strrev($cadena);
         return $cadena_invertida === $cadena;
     }

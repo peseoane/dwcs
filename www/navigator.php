@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-require './navigator/bootstrap.php';
+require "./navigator/bootstrap.php";
 
 $cssResource = new Resource(ResourceType::CSS);
 $jsResource = new Resource(ResourceType::JS);

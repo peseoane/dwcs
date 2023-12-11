@@ -21,7 +21,8 @@
 </form>
 
 <?php
-function calcular_mcd($a, $b) {
+function calcular_mcd($a, $b)
+{
     while ($b != 0) {
         $temp = $b;
         $b = $a % $b;

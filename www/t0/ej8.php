@@ -18,8 +18,9 @@
 </form>
 
 <?php
-function esBisiesto($anio) {
-    return ($anio % 400 == 0) || ($anio % 4 == 0 && $anio % 100 != 0);
+function esBisiesto($anio)
+{
+    return $anio % 400 == 0 || ($anio % 4 == 0 && $anio % 100 != 0);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

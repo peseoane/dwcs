@@ -19,7 +19,8 @@
 </form>
 
 <?php
-function imprimirMensaje($mensaje) {
+function imprimirMensaje($mensaje)
+{
     echo "<p>Mensaje: $mensaje</p>";
 }
 

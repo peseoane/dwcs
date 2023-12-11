@@ -25,10 +25,16 @@ $temp_bajas = array_slice($temperaturas, 0, 5);
 
 $temp_altas = array_slice($temperaturas, -5);
 
-echo "<p>Temperaturas de abril: " . implode(", ", $temperaturas) . " &deg;C</p>";
+echo "<p>Temperaturas de abril: " .
+    implode(", ", $temperaturas) .
+    " &deg;C</p>";
 echo "<p>Media de temperaturas: " . number_format($media, 2) . " &deg;C</p>";
-echo "<p>Cinco temperaturas más bajas: " . implode(", ", $temp_bajas) . " &deg;C</p>";
-echo "<p>Cinco temperaturas más altas: " . implode(", ", $temp_altas) . " &deg;C</p>";
+echo "<p>Cinco temperaturas más bajas: " .
+    implode(", ", $temp_bajas) .
+    " &deg;C</p>";
+echo "<p>Cinco temperaturas más altas: " .
+    implode(", ", $temp_altas) .
+    " &deg;C</p>";
 ?>
 </body>
 </html>

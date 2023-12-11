@@ -18,7 +18,8 @@
 </form>
 
 <?php
-function frase_en_minusculas($frase) {
+function frase_en_minusculas($frase)
+{
     return $frase === strtolower($frase);
 }
 

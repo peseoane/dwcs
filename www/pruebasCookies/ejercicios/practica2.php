@@ -3,25 +3,24 @@ declare(strict_types=1);
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $textValue = $_POST['textValue'] ?? null;
+    $textValue = $_POST["textValue"] ?? null;
 }
 
-if (isset($_POST['deleteSession'])) {
+if (isset($_POST["deleteSession"])) {
     session_destroy();
     header("Location: practica2.php");
-    exit;
+    exit();
 }
 
 if (!empty($textValue)) {
-    if (isset($_SESSION['textValue']) && is_array($_SESSION['textValue'])) {
-        $_SESSION['textValue'][] = $textValue;
+    if (isset($_SESSION["textValue"]) && is_array($_SESSION["textValue"])) {
+        $_SESSION["textValue"][] = $textValue;
     } else {
-        $_SESSION['textValue'] = [$textValue];
+        $_SESSION["textValue"] = [$textValue];
     }
     header("Location: practica2.php");
-    exit;
+    exit();
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,9 +50,7 @@ if (!empty($textValue)) {
 
 <h2>Current Cookies</h2>
 <pre>
-    <?php
-    var_dump($_SESSION);
-    ?>
+    <?php var_dump($_SESSION); ?>
 </pre>
 
 <h2>Add new data to the session</h2>

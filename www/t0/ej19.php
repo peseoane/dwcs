@@ -21,8 +21,9 @@
     </form>
 
     <?php
-    function filtrar_elementos_menores($array, $limite) {
-        $resultados = array();
+    function filtrar_elementos_menores($array, $limite)
+    {
+        $resultados = [];
         foreach ($array as $elemento) {
             if ($elemento < $limite) {
                 //$resultados[] = $elemento; // sintaxis rara... era mas claro un array_push o algo asi :( esto no se entiende
@@ -35,13 +36,14 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $numeros = $_POST["numeros"];
-        $limite = (int)$_POST["limite"];
+        $limite = (int) $_POST["limite"];
 
-        $numeros_array = array_map('intval', explode(',', $numeros));
+        $numeros_array = array_map("intval", explode(",", $numeros));
         $resultado = filtrar_elementos_menores($numeros_array, $limite);
 
         echo "<h3>Resultado:</h3>";
-        echo "Elementos menores que el límite ($limite): " . implode(", ", $resultado);
+        echo "Elementos menores que el límite ($limite): " .
+            implode(", ", $resultado);
     }
     ?>
 </div>

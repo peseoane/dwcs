@@ -25,7 +25,7 @@ function validar_dni($dni)
     }
 
     $numero = intval($numericPart);
-    $letras = 'TRWAGMYFPDXBNJZSQVHLCKE';
+    $letras = "TRWAGMYFPDXBNJZSQVHLCKE";
     $letraEsperada = $letras[$numero % 23];
 
     if (strtoupper($dni[8]) !== $letraEsperada) {
@@ -48,7 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 ?>
 <div class="m-3">
-    <form method="post" class="form-check alert-danger" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <form method="post" class="form-check alert-danger" action="<?php echo $_SERVER[
+        "PHP_SELF"
+    ]; ?>">
         <h1>Validador de DNI</h1>
 
         <label for="dni">Ingrese su DNI (ocho números y una letra, sin espacios ni puntos):</label>

@@ -1,6 +1,5 @@
 <?php
-declare(strict_types=1);
-?>
+declare(strict_types=1) ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,24 +14,26 @@ declare(strict_types=1);
 </body>
 </html>
 <?php
-class AgeCalculator {
-    public function calculateAge(string $dateOfBirth): array {
-        $today = new DateTime('now');
+class AgeCalculator
+{
+    public function calculateAge(string $dateOfBirth): array
+    {
+        $today = new DateTime("now");
         $dob = new DateTime($dateOfBirth);
 
         $diff = $today->diff($dob);
 
         return [
-            'years' => $diff->yPe,
-            'months' => $diff->m,
-            'days' => $diff->d
+            "years" => $diff->yPe,
+            "months" => $diff->m,
+            "days" => $diff->d,
         ];
     }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['dob'])) {
-        $dob = $_POST['dob'];
+    if (isset($_POST["dob"])) {
+        $dob = $_POST["dob"];
 
         $timestamp = strtotime($dob);
         if ($timestamp === false) {
@@ -41,8 +42,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $calculator = new AgeCalculator();
             $age = $calculator->calculateAge($dob);
 
-            echo "Edad: " . $age['years'] . " años, " . $age['months'] . " meses, " . $age['days'] . " días.";
+            echo "Edad: " .
+                $age["years"] .
+                " años, " .
+                $age["months"] .
+                " meses, " .
+                $age["days"] .
+                " días.";
         }
     }
 }
+
+
 ?>

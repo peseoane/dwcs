@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-const MYSQL_USER = 'root';
-const MYSQL_ROOT_PASSWORD = 'root';
-const MYSQL_HOST = 'mysql8';
-const MYSQL_DB = 'recetas';
-const MYSQL_DSN = 'mysql:host=' . MYSQL_HOST . ';dbname=' . MYSQL_DB;
+const MYSQL_USER = "root";
+const MYSQL_ROOT_PASSWORD = "root";
+const MYSQL_HOST = "mysql8";
+const MYSQL_DB = "recetas";
+const MYSQL_DSN = "mysql:host=" . MYSQL_HOST . ";dbname=" . MYSQL_DB;
 
 try {
     $pdo = new PDO(MYSQL_DSN, MYSQL_USER, MYSQL_ROOT_PASSWORD);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo 'Connected successfully to: ' . MYSQL_DSN;
+    echo "Connected successfully to: " . MYSQL_DSN;
 } catch (PDOException $e) {
-    echo 'Connection failed: ' . $e->getMessage();
-    exit;
+    echo "Connection failed: " . $e->getMessage();
+    exit();
 }
 
 $sql = "SELECT  receta.*,
@@ -23,8 +23,6 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $recetas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $columnNames = array_keys($recetas[0]);
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +36,7 @@ $columnNames = array_keys($recetas[0]);
 <table>
     <tr>
         <?php foreach ($columnNames as $columnName): ?>
-            <?php if ($columnName != 'cod_chef'): ?>
+            <?php if ($columnName != "cod_chef"): ?>
                 <th><?= $columnName ?></th>
             <?php endif; ?>
         <?php endforeach; ?>
@@ -46,7 +44,7 @@ $columnNames = array_keys($recetas[0]);
     <?php foreach ($recetas as $receta): ?>
         <tr>
             <?php foreach ($receta as $columnName => $columnValue): ?>
-                <?php if ($columnName != 'cod_chef'): ?>
+                <?php if ($columnName != "cod_chef"): ?>
                     <td><?= $columnValue ?></td>
                 <?php endif; ?>
             <?php endforeach; ?>

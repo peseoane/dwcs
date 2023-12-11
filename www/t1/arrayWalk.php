@@ -8,7 +8,6 @@
 </head>
 
 <?php
-
 class Alumno
 {
     private string $nombre;
@@ -39,41 +38,44 @@ class Alumno
 }
 
 $alumnos = [
-    new Alumno('Pepe', 'Pérez', array(10, 3, 4)),
-    new Alumno('Juan', 'García', array(1, 3, 2)),
-    new Alumno('Pepe', 'Pérez', array(2, 3, 5)),
-    new Alumno('Juan', 'García', array(2)),
-    new Alumno('Pepe', 'Gómez', array(2)),
+    new Alumno("Pepe", "Pérez", [10, 3, 4]),
+    new Alumno("Juan", "García", [1, 3, 2]),
+    new Alumno("Pepe", "Pérez", [2, 3, 5]),
+    new Alumno("Juan", "García", [2]),
+    new Alumno("Pepe", "Gómez", [2]),
 ];
 
 function imprimirAlumnos($arr): void
 {
-    echo '<ul>';
+    echo "<ul>";
     foreach ($arr as $alumno) {
-        echo '<li>' . $alumno->__get('nombre') . ' ' . $alumno->__get('apellidos') . ': ';
-        foreach ($alumno->__get('nota') as $nota) {
-            echo $nota . ' ';
+        echo "<li>" .
+            $alumno->__get("nombre") .
+            " " .
+            $alumno->__get("apellidos") .
+            ": ";
+        foreach ($alumno->__get("nota") as $nota) {
+            echo $nota . " ";
         }
-        echo '</li>';
+        echo "</li>";
     }
-    echo '</ul>';
+    echo "</ul>";
 }
 
 function subirNotas(array &$alumnos, string $nombre): void
 {
     array_walk($alumnos, function ($alumno) use ($nombre) {
-        if ($alumno->__get('nombre') === $nombre) {
-            $notas = $alumno->__get('nota');
+        if ($alumno->__get("nombre") === $nombre) {
+            $notas = $alumno->__get("nota");
             array_walk($notas, function (&$nota) {
                 if ($nota < 10) {
                     $nota++;
                 }
             });
-            $alumno->__set('nota', $notas);
+            $alumno->__set("nota", $notas);
         }
     });
 }
-
 ?>
 
 <body class="container" >
@@ -84,18 +86,12 @@ function subirNotas(array &$alumnos, string $nombre): void
     <p>La clase Alumno no puede tener propiedades públicas (supone crear los métodos __get y __set)</p>
     <p>Las propiedades de los alumnos son nombre, apellidos y nota</p>
     <h3>Notas originales</h3>
-    <?php
-    imprimirAlumnos($alumnos);
-    ?>
+    <?php imprimirAlumnos($alumnos); ?>
 
     <h4>Notas subidas</h4>
-    <?php
-    subirNotas($alumnos, 'Pepe');
-    ?>
+    <?php subirNotas($alumnos, "Pepe"); ?>
 
-    <?php
-    imprimirAlumnos($alumnos);
-    ?>
+    <?php imprimirAlumnos($alumnos); ?>
 
 </article>
 </body>
