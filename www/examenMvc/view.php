@@ -25,7 +25,9 @@ class View
         return $form;
     }
 
-
+    // Ah, the joys of crafting HTML in PHP.
+    // It's almost as delightful as debugging in the dark with
+    // sunglasses on.
 
     public function renderDeletionForm(): string
     {
@@ -55,5 +57,9 @@ class View
         return $form;
     }
 
+    // boiler plate...
+    // because who needs sanity anyway?
+    // It's like building a spaceship with duct tape—functional,
+    // but you question your life choices. Keep on soaring, PHP.
 
 }

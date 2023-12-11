@@ -14,7 +14,7 @@ class Database
     public function __construct()
     {
         $this->connect();
-    }
+            }
 
     private function connect(): void
     {
@@ -34,7 +34,9 @@ class Database
     public function deleteAllUserInformation(): void
     {
         $this->ensureConnection();
-
+        // Because sometimes connections just magically disappear.
+        // PHP, the master of disappearing acts.
+        // If only real magic was this unreliable.
         try {
             $this->connection->exec("DELETE FROM users");
         } catch (PDOException $e) {
@@ -42,12 +44,22 @@ class Database
         }
     }
 
+
     private function ensureConnection(): void
     {
         if (!isset($this->connection)) {
             $this->connect();
         }
     }
+    // this needs to be fixed. ... Of course, I'd also suggest that whoever was the genius who thought it was a good idea
+    // to connect to the database ONE F*CKING TIME PER POOL AT A TIME should be retroactively aborted.
+    //
+    // Who the f*ck does idiotic things like that? How did they noty die as babies, considering that they were likely too stupid
+    // to find a tit to suck on? PDO::__construct should handle that... and PDOStatement should take care... but nope.
+    //
+    // Yeah, I'm looking at you, PDO. The king of making simple things unnecessarily complicated. Connecting to a database
+    // shouldn't feel like a journey through hell. Aborting babies might be a bit extreme, but whoever designed this deserves
+    // a serious reality check.
 
     public function checkIfDbExists(): bool
     {
@@ -104,6 +116,27 @@ class Database
         }
     }
 
+    /*
+    public function insertBlob(string $filePath, string $mime): void
+    {
+        $this->ensureConnection();
+
+        try {
+            $blob = fopen($filePath, 'rb');
+
+            $sql = "INSERT INTO users (mime, data) VALUES(:mime, :data)";
+            $stmt = $this->connection->prepare($sql);
+
+            $stmt->bindParam(':mime', $mime);
+            $stmt->bindParam(':data', $blob, PDO::PARAM_LOB);
+
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+    */
+
     public function loginUser(string $username, string $password): void
     {
         $this->ensureConnection();
@@ -118,6 +151,7 @@ class Database
             echo $e->getMessage();
         }
     }
+
 
     public function addUser(string $username, string $surname, string $dob, string $email, string $password, ?string $filePath): void
     {
@@ -140,24 +174,29 @@ class Database
     }
 
 
-    public function checkPassword(string $username, string $password): bool
+    public function checkPassword(string $email, string $password): bool
     {
         $this->ensureConnection();
 
         try {
-            $stmt = $this->connection->prepare("SELECT password FROM users WHERE username = :username");
-            $stmt->bindParam(':username', $username);
+            $stmt = $this->connection->prepare("SELECT password FROM users WHERE email = :email");
+            $stmt->bindParam(':email', $email);
             $stmt->execute();
 
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($row && isset($row['password'])) {
-                return password_verify($password, $row['password']);
+                error_log("Stored password hash: " . $row['password']);
+                error_log("Provided password hash: " . password_hash($password, PASSWORD_DEFAULT));
+                $passwordMatches = password_verify($password, $row['password']);
+                error_log("Password matches: " . var_export($passwordMatches, true));
+                return $passwordMatches;
             } else {
+                error_log("No user found with email: " . $email);
                 return false;
             }
         } catch (PDOException $e) {
-            echo $e->getMessage();
+            error_log("PDOException: " . $e->getMessage());
             return false;
         }
     }
