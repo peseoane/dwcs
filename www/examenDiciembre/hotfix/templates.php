@@ -47,8 +47,6 @@ function generateRegister(): string {
     EOT;
 }
 
-
-
 function generateLogout(): string {
     return <<<EOT
     <form action="logout.php" method="post">

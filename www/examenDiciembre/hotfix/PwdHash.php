@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Model;
-require "..\utils\crypt.php";
+namespace App;
 
 class PwdHash
 {

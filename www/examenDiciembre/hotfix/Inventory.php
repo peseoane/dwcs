@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
+namespace App;
 
 interface Inventory
 {
-    public function addPartToWarehouse(\App\Model\Part $part): bool;
+    public function addPartToWarehouse(Part $part): bool;
 
-    public function deletePartFromWarehouse(\App\Model\Part $part): bool;
+    public function deletePartFromWarehouse(Part $part): bool;
 
     public function deletePartFromWarehouseByUUID(string $uuid): bool;
 

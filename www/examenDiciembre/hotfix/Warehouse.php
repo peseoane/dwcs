@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App;
 
-use Exception;
-use Inventory;
-use Override;
-use Singleton;
+require "Singleton.php";
+require "Inventory.php";
+require "Part.php";
+
 
 class Warehouse implements Inventory
 {
@@ -21,6 +21,7 @@ class Warehouse implements Inventory
     public function __construct()
     {
         $this->parts = [];
+        $this->partsCount = 0;
     }
 
     #[Override] public function addPartToWarehouse(Part $part): bool
@@ -79,4 +80,18 @@ class Warehouse implements Inventory
         }
         return false;
     }
+
+    public function &getParts(): array
+    {
+        return $this->parts;
+    }
+
+    public function generateDummyData(int $iterations): void
+    {
+        $randomData = getColCsvToArray("./sample.csv",1);
+        for ($i = 0; $i < $iterations; $i++) {
+            $this->addPartToWarehouse(new Part($randomData[rand(0, count($randomData) - 1)]));
+        }
+    }
+
 }

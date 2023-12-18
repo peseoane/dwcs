@@ -1,11 +1,6 @@
 <?php
+namespace App;
 
-namespace App\Model;
-
-use Exception;
-use function App\Utils\sanitizeEmail;
-
-require_once "..\utils\sanitize.php";
 
 class Email
 {
