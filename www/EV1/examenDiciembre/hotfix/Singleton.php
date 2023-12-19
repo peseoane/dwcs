@@ -16,7 +16,7 @@ trait Singleton
 
     public function __wakeup()
     {
-        throw new \App\Model\Exception("Cannot unserialize a singleton.");
+        throw new \App\Exception("Cannot unserialize a singleton.");
     }
 
     public static function getInstance()

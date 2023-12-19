@@ -24,18 +24,6 @@ class Warehouse implements Inventory
         $this->partsCount = 0;
     }
 
-    #[Override] public function addPartToWarehouse(Part $part): bool
-    {
-        try {
-            $this->parts[] = $part;
-            $this->partsCount++;
-            return true;
-        } catch (Exception $e) {
-            error_log($e->getMessage());
-            return false;
-        }
-    }
-
     #[Override] public function deletePartFromWarehouse(Part $part): bool
     {
         try {
@@ -47,7 +35,6 @@ class Warehouse implements Inventory
             return false;
         }
     }
-
 
     #[Override] public function getPartsCountByPartName(string $partName): int
     {
@@ -88,9 +75,21 @@ class Warehouse implements Inventory
 
     public function generateDummyData(int $iterations): void
     {
-        $randomData = getColCsvToArray("./sample.csv",1);
+        $randomData = getColCsvToArray("./sample.csv", 1);
         for ($i = 0; $i < $iterations; $i++) {
             $this->addPartToWarehouse(new Part($randomData[rand(0, count($randomData) - 1)]));
+        }
+    }
+
+    #[Override] public function addPartToWarehouse(Part $part): bool
+    {
+        try {
+            $this->parts[] = $part;
+            $this->partsCount++;
+            return true;
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
         }
     }
 

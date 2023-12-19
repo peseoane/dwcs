@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App;
 require "manager.php";
 require "templates.php";
@@ -14,22 +15,27 @@ echo generateRegister();
 
 $mywarehouse = Warehouse::getInstance();
 $mywarehouse->generateDummyData(10);
-var_dump($mywarehouse -> getParts());
+var_dump($mywarehouse->getParts());
 
 
 /* LAMDAS */
 
-$updateInventory = function(int $quantity): bool {
+$updateInventory = function (int $quantity): bool {
     $uuids = [];
     $mywarehouse = Warehouse::getInstance();
 
-    foreach (&$mywarehouse->getParts() as $part) {
+    foreach ($mywarehouse->getParts() as $part) {
         $uuids[] = $part->getUuid();
     }
 
-$uuid = $uuids[array_rand($uuids)];
+    $uuid = $uuids[array_rand($uuids)];
 
-    foreach ()
+    foreach (&$mywarehouse->getParts() as $part) {
+        if ($part->getUuid() === $uuid) {
+            $part->setQuantity($quantity);
+            return true;
+        }
+    }
 
 };
 
