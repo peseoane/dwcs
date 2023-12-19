@@ -12,7 +12,7 @@ function generateHashFromPassword(string $password): string
 {
     if (empty($password)) {
         throw new Exception("Password cannot be empty");
-    } else if (sanitizeString($password) != $password) {
+    } elseif (sanitizeString($password) != $password) {
         throw new Exception("Password contains invalid characters");
     }
     return password_hash($password, PASSWORD_DEFAULT);

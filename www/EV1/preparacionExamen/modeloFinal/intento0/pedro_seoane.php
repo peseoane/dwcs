@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 session_start();
 $init = function () {
-    if (!isset($_SESSION['registerUsers'])) {
-        $_SESSION['registerUsers'] = array();
+    if (!isset($_SESSION["registerUsers"])) {
+        $_SESSION["registerUsers"] = [];
     }
 };
-
 
 // Main loop
 // $checkUser = function (array $submitedRegistration, array $registeredUsers): bool {
@@ -19,33 +18,48 @@ $init = function () {
 //     return false;
 // };
 
-$checkUser = function (array $submitedRegistration, array &$registeredUsers): bool {
+$checkUser = function (
+    array $submitedRegistration,
+    array &$registeredUsers
+): bool {
     $found = false;
-    array_walk($registeredUsers, function ($registeredUser) use ($submitedRegistration, &$found) {
-        if (isset($registeredUser['registerEmail']) && $submitedRegistration['tmpRegisterEmail'] === $registeredUser['registerEmail']) {
+    array_walk($registeredUsers, function ($registeredUser) use (
+        $submitedRegistration,
+        &$found
+    ) {
+        if (
+            isset($registeredUser["registerEmail"]) &&
+            $submitedRegistration["tmpRegisterEmail"] ===
+                $registeredUser["registerEmail"]
+        ) {
             $found = true;
         }
     });
     return $found;
 };
 
-
 $init();
-if (isset($_POST['loginEmail']) && isset($_POST['loginPassword'])) {
-
-    $email = $_POST['loginEmail'];
-    $password = $_POST['loginPassword'];
-    $hashedPassword = hash('sha256', $password);
+if (isset($_POST["loginEmail"]) && isset($_POST["loginPassword"])) {
+    $email = $_POST["loginEmail"];
+    $password = $_POST["loginPassword"];
+    $hashedPassword = hash("sha256", $password);
 
     $found = false;
-    array_walk($_SESSION['registerUsers'], function ($registeredUser) use ($email, $hashedPassword, &$found) {
-        if ($registeredUser['registerEmail'] === $email && $registeredUser['registerPassword'] === $hashedPassword) {
+    array_walk($_SESSION["registerUsers"], function ($registeredUser) use (
+        $email,
+        $hashedPassword,
+        &$found
+    ) {
+        if (
+            $registeredUser["registerEmail"] === $email &&
+            $registeredUser["registerPassword"] === $hashedPassword
+        ) {
             $found = true;
         }
     });
 
     if ($found) {
-        $_SESSION['loggedEmail'] = $email;
+        $_SESSION["loggedEmail"] = $email;
         header("Location: pedro_seoane_login.php");
         echo "Login correcto";
     } else {
@@ -53,43 +67,38 @@ if (isset($_POST['loginEmail']) && isset($_POST['loginPassword'])) {
     }
 
     var_dump($_SESSION);
+} elseif (isset($_POST["registerEmail"]) && isset($_POST["registerPassword"])) {
+    $email = $_POST["registerEmail"];
+    $password = $_POST["registerPassword"];
 
+    $tmpRegisterUser = [
+        "uniqueId" => uniqid(),
+        "tmpRegisterEmail" => $email,
+        "tmpRegisterPassword" => hash("sha256", $password),
+    ];
 
-} else if (isset($_POST['registerEmail']) && isset($_POST['registerPassword'])) {
-    $email = $_POST['registerEmail'];
-    $password = $_POST['registerPassword'];
-
-    $tmpRegisterUser = array(
-        'uniqueId'            => uniqid(),
-        'tmpRegisterEmail'    => $email,
-        'tmpRegisterPassword' => hash('sha256', $password)
-    );
-
-    if ($checkUser($tmpRegisterUser, $_SESSION['registerUsers'])) {
+    if ($checkUser($tmpRegisterUser, $_SESSION["registerUsers"])) {
         error_log("Usuario ya registrado", 0);
         echo "Usuario ya registrado";
     } else {
         echo "Usuario registrado correctamente";
-        $_SESSION['registerUsers'][] = array(
-            'uniqueId'         => $tmpRegisterUser['uniqueId'],
-            'registerEmail'    => $tmpRegisterUser['tmpRegisterEmail'],
-            'registerPassword' => $tmpRegisterUser['tmpRegisterPassword']
-        );
+        $_SESSION["registerUsers"][] = [
+            "uniqueId" => $tmpRegisterUser["uniqueId"],
+            "registerEmail" => $tmpRegisterUser["tmpRegisterEmail"],
+            "registerPassword" => $tmpRegisterUser["tmpRegisterPassword"],
+        ];
         unset($tmpRegisterUser); // memory clean! :) (not sure if it's necessary)
     }
     var_dump($_SESSION);
-
-} else if (isset($_POST['reset'])) {
+} elseif (isset($_POST["reset"])) {
     session_unset();
     session_destroy();
     header("pedro_seoane.php");
-
 } else {
     //log it
     error_log("POST vacio, recargando...", 0);
     header("pedro_seoane.php");
 }
-
 ?>
 <html>
 <head>

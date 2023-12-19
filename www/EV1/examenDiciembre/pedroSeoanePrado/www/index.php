@@ -2,7 +2,7 @@
 declare(strict_types=1);
 session_start();
 
-require './Utils.php';
+require "./Utils.php";
 
 $dummyData = generarDatosDummy(1);
 echo "<h6> ARRAY SIN ACTUALIZAR </h6>";
@@ -10,17 +10,16 @@ var_dump($dummyData);
 // Si no existe esa canitdad dará falso si no nos devolverá un CLONADO MUTADO del array con ese campo actualizado.
 echo "<h6> ARRAY ACTUALIZADO UN CAMPO SI HAY POSITIVO </h6>";
 var_dump(checkForItem($dummyData, 100, 2));
-$_SESSION['inventario'] = $dummyData;
+$_SESSION["inventario"] = $dummyData;
 // MAIN {LOOP}
 echo "<h6> ESTADO DE LA SESION </h6>";
 var_dump($_SESSION);
 
-if (isset($_POST['reset'])) {
+if (isset($_POST["reset"])) {
     session_destroy();
-    $_SESSION['intentos'] = 0;
+    $_SESSION["intentos"] = 0;
     header("Location: index.php");
 }
-
 ?>
 
 <<!doctype html>

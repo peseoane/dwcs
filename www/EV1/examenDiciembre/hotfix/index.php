@@ -17,7 +17,6 @@ $mywarehouse = Warehouse::getInstance();
 $mywarehouse->generateDummyData(10);
 var_dump($mywarehouse->getParts());
 
-
 /* LAMDAS */
 
 $updateInventory = function (int $quantity): bool {
@@ -30,13 +29,12 @@ $updateInventory = function (int $quantity): bool {
 
     $uuid = $uuids[array_rand($uuids)];
 
-    foreach (&$mywarehouse->getParts() as $part) {
+    foreach ($mywarehouse->getParts() as $part) {
         if ($part->getUuid() === $uuid) {
             $part->setQuantity($quantity);
             return true;
         }
     }
-
 };
 
 $updateInventory(2);

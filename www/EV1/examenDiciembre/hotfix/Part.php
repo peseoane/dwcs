@@ -6,7 +6,6 @@ require "sanitize.php";
 
 class Part
 {
-
     private string $uuid;
     private string $partName;
 
@@ -25,6 +24,4 @@ class Part
     {
         return $this->partName;
     }
-
-
 }

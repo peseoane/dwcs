@@ -22,5 +22,4 @@ class Inventario
     {
         $this->piezas = $piezas;
     }
-
 }

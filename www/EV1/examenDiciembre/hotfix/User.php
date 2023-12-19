@@ -1,10 +1,8 @@
 <?php
 namespace App;
 
-
 class User
 {
-
     private Email $email;
     private PwdHash $pwdHash;
 
@@ -28,5 +26,4 @@ class User
     }
 
     // TODO: HASH INVALIDATION, ORPHANED OBJECTS, ETC...
-
 }

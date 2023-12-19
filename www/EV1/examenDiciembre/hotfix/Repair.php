@@ -11,8 +11,12 @@ class Repair
     private string $operatorName;
     private array $partsUsed;
 
-    public function __construct(string $qualifiedIdentifier, string $description, string $date, string $operatorName)
-    {
+    public function __construct(
+        string $qualifiedIdentifier,
+        string $description,
+        string $date,
+        string $operatorName
+    ) {
         $this->id = self::$id++;
         $this->qualifiedIdentifier = $qualifiedIdentifier;
         $this->description = $description;
@@ -40,5 +44,4 @@ class Repair
         }
         return $uuids;
     }
-
 }

@@ -9,10 +9,12 @@ function addToSession(string $key, $value): void
 }
 
 session_start();
-if (isset($_POST['loginEmail']) && isset($_POST['loginPassword'])) {
-
+if (isset($_POST["loginEmail"]) && isset($_POST["loginPassword"])) {
     try {
-        $localUser = new User(normaliceFormField($_POST['loginEmail']), normaliceFormField($_POST['loginPassword']));
+        $localUser = new User(
+            normaliceFormField($_POST["loginEmail"]),
+            normaliceFormField($_POST["loginPassword"])
+        );
         addToSession("registerUsers", $localUser);
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage());
@@ -20,5 +22,4 @@ if (isset($_POST['loginEmail']) && isset($_POST['loginPassword'])) {
     }
 
     header("Location: Pedro_Seoane.php");
-
 }

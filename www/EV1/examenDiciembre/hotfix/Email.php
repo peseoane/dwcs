@@ -1,7 +1,6 @@
 <?php
 namespace App;
 
-
 class Email
 {
     private string $email;
@@ -22,5 +21,4 @@ class Email
     {
         return $this->email;
     }
-
 }

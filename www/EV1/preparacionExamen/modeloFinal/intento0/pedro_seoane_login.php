@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 session_start();
 
-$loggedEmail = $_SESSION['loggedEmail'];
+$loggedEmail = $_SESSION["loggedEmail"];
 
 // $userData = array_filter($_SESSION['registerUsers'], function ($user) use ($loggedEmail) {
 //     return $user['registerEmail'] === $loggedEmail;
@@ -11,8 +11,11 @@ $loggedEmail = $_SESSION['loggedEmail'];
 
 $userData = null;
 $index = null;
-array_walk($_SESSION['registerUsers'], function ($user, $index) use ($loggedEmail, &$userData) {
-    if ($user['registerEmail'] === $loggedEmail) {
+array_walk($_SESSION["registerUsers"], function ($user, $index) use (
+    $loggedEmail,
+    &$userData
+) {
+    if ($user["registerEmail"] === $loggedEmail) {
         $userData = $user;
         echo "Index: " . $index . "\n";
     }
@@ -20,33 +23,34 @@ array_walk($_SESSION['registerUsers'], function ($user, $index) use ($loggedEmai
 
 var_dump($userData);
 
-if (isset($_POST['currentPassword']) && isset($_POST['newPassword']) && isset($_POST['newPasswordRepeat'])) {
+if (
+    isset($_POST["currentPassword"]) &&
+    isset($_POST["newPassword"]) &&
+    isset($_POST["newPasswordRepeat"])
+) {
+    $currentPassword = $_POST["currentPassword"];
+    $currentHashedPassword = hash("sha256", $currentPassword);
+    $newPassword = $_POST["newPassword"];
+    $newPasswordRepeat = $_POST["newPasswordRepeat"];
+    $newHashedPassword = hash("sha256", $newPassword);
 
-    $currentPassword = $_POST['currentPassword'];
-    $currentHashedPassword = hash('sha256', $currentPassword);
-    $newPassword = $_POST['newPassword'];
-    $newPasswordRepeat = $_POST['newPasswordRepeat'];
-    $newHashedPassword = hash('sha256', $newPassword);
-
-    if ($newHashedPassword === $userData['registerPassword']){
+    if ($newHashedPassword === $userData["registerPassword"]) {
         echo "New password can't be the same as the current password";
-    } else if ($newPassword !== $newPasswordRepeat) {
+    } elseif ($newPassword !== $newPasswordRepeat) {
         echo "New password and repeat new password must be the same";
-    } else if ($currentHashedPassword !== $userData['registerPassword']) {
+    } elseif ($currentHashedPassword !== $userData["registerPassword"]) {
         echo "Current password is not correct";
     } else {
-        $userData['registerPassword'] = $newHashedPassword;
-        $_SESSION['registerUsers'][$index] = $userData;
+        $userData["registerPassword"] = $newHashedPassword;
+        $_SESSION["registerUsers"][$index] = $userData;
         echo "Password changed successfully";
     }
 
-    unset($_POST['currentPassword']);
-    unset($_POST['newPassword']);
+    unset($_POST["currentPassword"]);
+    unset($_POST["newPassword"]);
 
-    var_dump($_SESSION['registerUsers']);
-
+    var_dump($_SESSION["registerUsers"]);
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +58,7 @@ if (isset($_POST['currentPassword']) && isset($_POST['newPassword']) && isset($_
 
 <form method="post">
 
-    <p>Change password for: <?php echo $loggedEmail ?></p>
+    <p>Change password for: <?php echo $loggedEmail; ?></p>
     <label for="currentPassword">Current password</label>
     <input type="password" name="currentPassword" id="currentPassword">
     <br>

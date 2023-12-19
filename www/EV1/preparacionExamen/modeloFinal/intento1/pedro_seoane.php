@@ -7,20 +7,17 @@ require "utils.php";
 
 // LOCAL Functions
 
-
 // Main Loop
 
 initSession();
 
 // Endpoints
-if (isset($_POST['reset'])) {
+if (isset($_POST["reset"])) {
     session_destroy();
     initSession();
-} elseif (isset($_POST['print'])) {
+} elseif (isset($_POST["print"])) {
     error_log("SESSION: " . var_dump($_SESSION));
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -59,12 +56,12 @@ if (isset($_POST['reset'])) {
 </form>
 
 <h3>RESET SESSION</h3>
-<form method="post" action=<?php normaliceFormField($_SERVER['PHP_SELF']) ?>>
+<form method="post" action=<?php normaliceFormField($_SERVER["PHP_SELF"]); ?>>
     <input type="submit" name="reset" value="Reset">
 </form>
 
 <h4>PRINT SESSION</h4>
-<form method="post" action=<?php normaliceFormField($_SERVER['PHP_SELF']) ?>>
+<form method="post" action=<?php normaliceFormField($_SERVER["PHP_SELF"]); ?>>
     <input type="submit" name="print" value="Print">
 </form>
 

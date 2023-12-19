@@ -1,4 +1,4 @@
-﻿CREATE DATABASE musica;
+﻿CREATE DATABASE IF NOT EXISTS musica;
 USE musica;
 CREATE TABLE IF NOT EXISTS `artistas`
 (

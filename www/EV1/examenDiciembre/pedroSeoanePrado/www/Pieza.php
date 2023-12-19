@@ -3,22 +3,22 @@ declare(strict_types=1);
 
 class Pieza
 {
-
     private int $idPieza;
 
     private string $nombrePieza;
     private int $numUnidadesPieza;
     private bool $actualizado;
 
-
-
     /**
      * @param int $idPieza Por el momento supondemos que es para una FK por tanto int i32.
      * @param string $nombrePieza
      * @param int $numUnidadesPieza
      */
-    public function __construct(int $idPieza, string $nombrePieza, int $numUnidadesPieza)
-    {
+    public function __construct(
+        int $idPieza,
+        string $nombrePieza,
+        int $numUnidadesPieza
+    ) {
         $this->idPieza = $idPieza;
         $this->nombrePieza = $nombrePieza;
         $this->numUnidadesPieza = $numUnidadesPieza;
@@ -67,5 +67,4 @@ class Pieza
         $this->actualizado = $actualizado;
         return $this;
     }
-
 }

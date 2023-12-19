@@ -7,10 +7,13 @@ function initSession(): bool
 {
     try {
         session_start();
-        if (!isset($_SESSION['registerUsers'])) {
-            $_SESSION['registerUsers'] = array();
+        if (!isset($_SESSION["registerUsers"])) {
+            $_SESSION["registerUsers"] = [];
             $tmpPassword = uniqid();
-            $_SESSION['registerUsers'][] = new User("admin@admin.es", $tmpPassword);
+            $_SESSION["registerUsers"][] = new User(
+                "admin@admin.es",
+                $tmpPassword
+            );
             error_log("root password is: " . $tmpPassword);
         }
         return true;
@@ -24,10 +27,16 @@ function existsUser(string $email, string $hashedPassword): bool
 {
     try {
         $exists = false;
-        array_walk($_SESSION['registerUsers'],
-            function ($user) use ($email, $hashedPassword, &$exists) {
-                if ($user->getEmail() == $email && $user->getHashedPassword() == $hashedPassword) {
-                    $exists = true;
+        array_walk($_SESSION["registerUsers"], function ($user) use (
+            $email,
+            $hashedPassword,
+            &$exists
+        ) {
+            if (
+                $user->getEmail() == $email &&
+                $user->getHashedPassword() == $hashedPassword
+            ) {
+                $exists = true;
             }
         });
         return $exists;
@@ -42,8 +51,14 @@ function getUserIndex(User $user): int
 {
     try {
         $index = -1;
-        array_walk($_SESSION['registerUsers'], function ($localUser, $key) use ($user, &$index) {
-            if ($localUser->getEmail() == $user->getEmail() && $localUser->getHashedPassword() == $user->getHashedPassword()) {
+        array_walk($_SESSION["registerUsers"], function ($localUser, $key) use (
+            $user,
+            &$index
+        ) {
+            if (
+                $localUser->getEmail() == $user->getEmail() &&
+                $localUser->getHashedPassword() == $user->getHashedPassword()
+            ) {
                 $index = $key;
             }
         });
@@ -60,7 +75,7 @@ function updateUser(User $user): bool
     try {
         $index = getUserIndex($user);
         if ($index != -1) {
-            $_SESSION['registerUsers'][$index] = $user;
+            $_SESSION["registerUsers"][$index] = $user;
             return true;
         }
         return false;
@@ -75,7 +90,9 @@ function normaliceFormField(string $field): string
 {
     try {
         error_log("normaliceFormField: " . $field);
-        return trim(stripslashes(htmlspecialchars($field, ENT_QUOTES, 'UTF-8')));
+        return trim(
+            stripslashes(htmlspecialchars($field, ENT_QUOTES, "UTF-8"))
+        );
     } catch (Exception $localException) {
         return "ERROR -> " . var_dump($localException->getMessage());
     }

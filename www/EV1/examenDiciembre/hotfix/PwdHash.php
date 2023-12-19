@@ -4,7 +4,6 @@ namespace App;
 
 class PwdHash
 {
-
     private readonly string $pwdHash;
     private bool $isValid;
 
@@ -31,5 +30,4 @@ class PwdHash
         }
         return $this->pwdHash;
     }
-
 }

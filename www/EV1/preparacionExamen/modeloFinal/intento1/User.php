@@ -18,7 +18,7 @@ class User
             throw new Exception("Invalid email");
         }
         $this->email = $email;
-        $this->hashedPassword = hash('sha256', $password);
+        $this->hashedPassword = hash("sha256", $password);
     }
 
     public function getEmail(): string
