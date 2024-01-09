@@ -1,10 +1,13 @@
 <?php
 declare(strict_types=1);
 
-const MYSQL_USER = "root";
-const MYSQL_ROOT_PASSWORD = "root";
-const MYSQL_HOST = "mysql8";
-const MYSQL_DB = "recetas";
+$db_config = parse_ini_file(".db");
+// NOTA: no podemos usar const directamente dado que e l valor de las constantes debe ser conocido en tiempo de
+// compilación
+define('MYSQL_USER', $db_config["MYSQL_USER"]);
+define('MYSQL_ROOT_PASSWORD', $db_config["MYSQL_ROOT_PASSWORD"]);
+define('MYSQL_HOST', $db_config["MYSQL_HOST"]);
+define('MYSQL_DB', $db_config["MYSQL_DB"]);
 const MYSQL_DSN = "mysql:host=" . MYSQL_HOST . ";dbname=" . MYSQL_DB;
 
 try {
@@ -24,6 +27,7 @@ $stmt->execute();
 $recetas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $columnNames = array_keys($recetas[0]);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
