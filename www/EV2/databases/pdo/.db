@@ -1,0 +1,5 @@
+[database_secrets]
+MYSQL_HOST = "dwcs-mysql"
+MYSQL_USER = "root"
+MYSQL_ROOT_PASSWORD = ""
+MYSQL_DB = "recetas"
