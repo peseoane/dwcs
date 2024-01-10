@@ -1,5 +1,5 @@
 ﻿<?php
-$mysqli = new mysqli("localhost", "root", "", "musica");
+$mysqli = new mysqli("mysql", "root", "", "musica");
 if ($mysqli->connect_error) {
     die(
         "Error de Conexión (" .

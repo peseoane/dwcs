@@ -3,8 +3,8 @@ services:
   php8:
     container_name: dwcs-php8
     build:
-         context: .
-         dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - './config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini'
       - './config/php.ini:/usr/local/etc/php/php.ini'
@@ -23,7 +23,7 @@ services:
     volumes:
       - dwcs-db:/var/lib/mysql
     ports:
-      - "3307:3306"
+      - "3306:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: ""
