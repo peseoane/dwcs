@@ -27,9 +27,44 @@ if (isset($_POST["chef_codigo"])) {
 }
 
 if (isset ($_POST["delete"])) {
-    $sqlSentence = "DELETE FROM chef WHERE codigo = :chef_codigo";
+    try {
+        $pdo->beginTransaction();
+
+        $sqlSentence = "DELETE FROM receta_ingrediente WHERE cod_receta IN (SELECT codigo FROM receta WHERE cod_chef = :chef_codigo)";
+        $stmt = $pdo->prepare($sqlSentence);
+        $stmt->execute(["chef_codigo" => $_POST["chef"]["codigo"]]);
+
+        $sqlSentence = "DELETE FROM receta WHERE cod_chef = :chef_codigo";
+        $stmt = $pdo->prepare($sqlSentence);
+        $stmt->execute(["chef_codigo" => $_POST["chef"]["codigo"]]);
+
+        $sqlSentence = "DELETE FROM libro WHERE cod_chef = :chef_codigo";
+        $stmt = $pdo->prepare($sqlSentence);
+        $stmt->execute(["chef_codigo" => $_POST["chef"]["codigo"]]);
+
+        $sqlSentence = "DELETE FROM chef WHERE codigo = :chef_codigo";
+        $stmt = $pdo->prepare($sqlSentence);
+        $stmt->execute(["chef_codigo" => $_POST["chef"]["codigo"]]);
+
+        $pdo->commit();
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        throw $e;
+    }
+    header("Location: assignment-2.php");
+}
+
+if (isset($_POST["update"])) {
+    $sqlSentence = "UPDATE chef SET nombre = :nombre,
+                                    apellido1 = :apellido1,
+                                    apellido2 = :apellido2,
+                                    nombreartistico = :nombreartistico,
+                                    sexo = :sexo,
+                                    fecha_nacimiento = :fecha_nacimiento,
+                                    localidad = :localidad
+                    WHERE codigo = :codigo";
     $stmt = $pdo->prepare($sqlSentence);
-    $stmt->execute(["chef_codigo" => $_POST["chef_codigo"]]);
+    $stmt->execute($_POST["chef"]);
     header("Location: assignment-2.php");
 }
 
@@ -43,33 +78,49 @@ if (isset ($_POST["delete"])) {
 </head>
 <body>
 <h1>EDITAR CHEF</h1>
-<form action="chefs.php" method="post">
-    <label for="chef_codigo">Código
-        <input type="text" name="chef_codigo" value="<?= $chef["codigo"] ?>" readonly
+<form action="chefs.php" method="post" onsubmit="confirmDelete()">
+    <label for="chef[codigo]">Código
+        <input type="text" name="chef[codigo]" value="<?= $chef["codigo"] ?>" readonly
     </label>
     <br>
-    <label for="chef_nombre">Nombre
-        <input type="text" name="chef_nombre" value="<?= $chef["nombre"] ?>">
+    <label for="chef[nombre]">Nombre
+        <input type="text" name="chef[nombre]" value="<?= $chef["nombre"] ?>">
     </label>
     <br>
-    <label for="chef_apellido1">Primer apellido
-        <input type="text" name="chef_apellido1" value="<?= $chef["apellido1"] ?>"></label>
-    <label for="chef_apellido2">Segundo apellido
-        <input type="text" name="chef_apellido2" value="<?= $chef["apellido2"] ?>"><br></label>
-    <label for="chef_nombreartistico">Nombre artístico
-        <input type="text" name="chef_nombreartistico" value="<?= $chef["nombreartistico"] ?>"><br></label>
-    <label for="chef_sexo">Sexo
-        <select name="chef_sexo">
+    <label for="chef[apellido1]">Primer apellido
+        <input type="text" name="chef[apellido1]" value="<?= $chef["apellido1"] ?>"></label>
+    <label for="chef[apellido2]">Segundo apellido
+        <input type="text" name="chef[apellido2]" value="<?= $chef["apellido2"] ?>"><br></label>
+    <label for="chef[nombreartistico]">Nombre artístico
+        <input type="text" name="chef[nombreartistico]" value="<?= $chef["nombreartistico"] ?>"><br></label>
+    <label for="chef[sexo]">Sexo
+        <select name="chef[sexo]">
             <option value="H" <?= $chef["sexo"] === "H" ? "selected" : "" ?>>Hombre</option>
             <option value="M" <?= $chef["sexo"] === "M" ? "selected" : "" ?>>Mujer</option>
         </select><br></label>
-    <label for="chef_fecha_nacimiento">Fecha de nacimiento
-        <input type="date" name="chef_fecha_nacimiento" value="<?= $chef["fecha_nacimiento"] ?>"><br></label>
-    <label for="chef_localidad">Localidad
-        <input type="text" name="chef_localidad" value="<?= $chef["localidad"] ?>"><br></label>
-    <input type="submit" value="Actualizar" >
-    <input type="submit" value="Eliminar" name="delete" >
+    <label for="chef[fecha_nacimiento]">Fecha de nacimiento
+        <input type="date" name="chef[fecha_nacimiento]" value="<?= $chef["fecha_nacimiento"] ?>"><br></label>
+    <label for="chef[localidad]">Localidad
+        <input type="text" name="chef[localidad]" value="<?= $chef["localidad"] ?>"><br></label>
+    <input type="submit" value="Actualizar" name="update">
+    <input type="submit" value="Eliminar" name="delete" onclick="showMessage();">
 </form>
 <a href="assignment-2.php">Volver</a>
 </body>
+
+<script>
+    function confirmDelete() {
+        return confirm("¿Estás seguro de que quieres eliminar este chef y todas sus recetas?");
+    }
+
+    function showMessage() {
+        let message = document.createElement("div");
+        message.textContent = "El chef y todas sus recetas han sido eliminados.";
+        document.body.appendChild(message);
+        setTimeout(function () {
+            document.body.removeChild(message);
+        }, 4000);
+    }
+</script>
+
 </html>
