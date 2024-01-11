@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 if (isset($_POST["deleteSession"])) {
     session_destroy();
-    header("Location: practica2.php");
+    header("Location: assignment-2.php");
     exit();
 }
 
@@ -18,7 +18,7 @@ if (!empty($textValue)) {
     } else {
         $_SESSION["textValue"] = [$textValue];
     }
-    header("Location: practica2.php");
+    header("Location: assignment-2.php");
     exit();
 }
 ?>
