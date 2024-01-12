@@ -1,7 +1,10 @@
 <?php
 declare(strict_types=1);
+
 require_once "dbUtils.php";
 $pdo = (new dbUtils(".db"))->getPdo();
+
+# require_once "assignment-2.php";
 
 if (isset($_GET["receta_nombre"])) {
     // Table ingrediente and receta are linked by the table receta_ingrediente

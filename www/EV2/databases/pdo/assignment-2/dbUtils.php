@@ -8,7 +8,7 @@ readonly class dbUtils
     private string $MYSQL_HOST;
     private string $MYSQL_DB;
     private string $MYSQL_DSN;
-    private PDO $pdo;
+
     public function __construct(string $configFilePath)
     {
         $db_config = $this->getDataFromConfigFile($configFilePath);
@@ -27,15 +27,14 @@ readonly class dbUtils
     public function getPdo(): PDO
     {
         try {
-            $this->pdo = new PDO($this->MYSQL_DSN, $this->MYSQL_USER, $this->MYSQL_ROOT_PASSWORD);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo = new PDO($this->MYSQL_DSN, $this->MYSQL_USER, $this->MYSQL_ROOT_PASSWORD);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             error_log("Connected successfully to: " . $this->MYSQL_DSN);
-            return $this->pdo;
+            return $pdo;
         } catch (PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
             error_log("Connection failed: " . $e->getMessage());
             exit();
         }
     }
-
 }

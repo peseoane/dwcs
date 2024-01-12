@@ -13,12 +13,26 @@ function getChefs(PDO $pdo, int $codigo)
                            chef.nombreartistico,
                            chef.sexo,
                            chef.fecha_nacimiento,
-                           chef.localidad
-    FROM chef WHERE codigo = :chef_codigo";
+                           chef.localidad,
+                           chef.cod_provincia,
+                           provincia.nombre as provincia
+    FROM chef 
+    JOIN provincia ON chef.cod_provincia = provincia.codigo
+    WHERE chef.codigo = :chef_codigo";
     $stmt = $pdo->prepare($sqlSentence);
     $stmt->execute(["chef_codigo" => $codigo]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+function getProvinces(PDO $pdo)
+{
+    $sqlSentence = "SELECT * FROM provincia";
+    $stmt = $pdo->prepare($sqlSentence);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$provinces = getProvinces($pdo);
 
 if (isset($_POST["chef_codigo"])) {
     $chef = getChefs($pdo, (int)$_POST["chef_codigo"]);
@@ -61,7 +75,8 @@ if (isset($_POST["update"])) {
                                     nombreartistico = :nombreartistico,
                                     sexo = :sexo,
                                     fecha_nacimiento = :fecha_nacimiento,
-                                    localidad = :localidad
+                                    localidad = :localidad,
+                                    cod_provincia = :cod_provincia
                     WHERE codigo = :codigo";
     $stmt = $pdo->prepare($sqlSentence);
     $stmt->execute($_POST["chef"]);
@@ -69,6 +84,7 @@ if (isset($_POST["update"])) {
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,35 +94,89 @@ if (isset($_POST["update"])) {
 </head>
 <body>
 <h1>EDITAR CHEF</h1>
-<form action="chefs.php" method="post" onsubmit="confirmDelete()">
-    <label for="chef[codigo]">Código
-        <input type="text" name="chef[codigo]" value="<?= $chef["codigo"] ?>" readonly
-    </label>
-    <br>
-    <label for="chef[nombre]">Nombre
-        <input type="text" name="chef[nombre]" value="<?= $chef["nombre"] ?>">
-    </label>
-    <br>
-    <label for="chef[apellido1]">Primer apellido
-        <input type="text" name="chef[apellido1]" value="<?= $chef["apellido1"] ?>"></label>
-    <label for="chef[apellido2]">Segundo apellido
-        <input type="text" name="chef[apellido2]" value="<?= $chef["apellido2"] ?>"><br></label>
-    <label for="chef[nombreartistico]">Nombre artístico
-        <input type="text" name="chef[nombreartistico]" value="<?= $chef["nombreartistico"] ?>"><br></label>
-    <label for="chef[sexo]">Sexo
-        <select name="chef[sexo]">
-            <option value="H" <?= $chef["sexo"] === "H" ? "selected" : "" ?>>Hombre</option>
-            <option value="M" <?= $chef["sexo"] === "M" ? "selected" : "" ?>>Mujer</option>
-        </select><br></label>
-    <label for="chef[fecha_nacimiento]">Fecha de nacimiento
-        <input type="date" name="chef[fecha_nacimiento]" value="<?= $chef["fecha_nacimiento"] ?>"><br></label>
-    <label for="chef[localidad]">Localidad
-        <input type="text" name="chef[localidad]" value="<?= $chef["localidad"] ?>"><br></label>
-    <input type="submit" value="Actualizar" name="update">
-    <input type="submit" value="Eliminar" name="delete" onclick="showMessage();">
-</form>
+<table class="edicion">
+    <form action="chefs.php" method="post" onsubmit="confirmDelete()">
+        <tr>
+            <td>
+                <label for="chef[codigo]">Código
+                    <input type="text" name="chef[codigo]" value="<?= $chef["codigo"] ?>" readonly>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="chef[nombre]">Nombre
+                    <input type="text" name="chef[nombre]" value="<?= $chef["nombre"] ?>">
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="chef[apellido1]">Primer apellido
+                    <input type="text" name="chef[apellido1]" value="<?= $chef["apellido1"] ?>">
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="chef[apellido2]">Segundo apellido
+                    <input type="text" name="chef[apellido2]" value="<?= $chef["apellido2"] ?>">
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="chef[nombreartistico]">Nombre artístico
+                    <input type="text" name="chef[nombreartistico]" value="<?= $chef["nombreartistico"] ?>">
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="chef[sexo]">Sexo
+                    <select name="chef[sexo]">
+                        <option value="H" <?= $chef["sexo"] === "H" ? "selected" : "" ?>>Hombre</option>
+                        <option value="M" <?= $chef["sexo"] === "M" ? "selected" : "" ?>>Mujer</option>
+                    </select>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="chef[fecha_nacimiento]">Fecha de nacimiento
+                    <input type="date" name="chef[fecha_nacimiento]" value="<?= $chef["fecha_nacimiento"] ?>">
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="chef[localidad]">Localidad
+                    <input type="text" name="chef[localidad]" value="<?= $chef["localidad"] ?>">
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Actualizar" name="update">
+                <input type="submit" value="Eliminar" name="delete" onclick="showMessage();">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <label for="chef[cod_provincia]">Provincia
+                    <select name="chef[cod_provincia]">
+                        <?php foreach ($provinces as $province): ?>
+                            <option value="<?= $province["codigo"] ?>" <?= $chef["cod_provincia"] === $province["codigo"] ? "selected" : "" ?>><?= $province["nombre"] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </td>
+        </tr>
+
+    </form>
+</table>
 <a href="assignment-2.php">Volver</a>
-</body>
 
 <script>
     function confirmDelete() {
@@ -123,4 +193,5 @@ if (isset($_POST["update"])) {
     }
 </script>
 
+</body>
 </html>
