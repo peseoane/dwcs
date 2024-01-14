@@ -11,6 +11,7 @@ services:
       - './www/:/var/www/html'
     ports:
       - "8080:80"
+    tty: true
     working_dir: /var/www/html
     environment:
       XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9003 remote_enable=1
