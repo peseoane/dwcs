@@ -41,7 +41,7 @@ services:
     container_name: dwcs-php
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     hostname: php82-xdebug32
     volumes:
       - ./config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
