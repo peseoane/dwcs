@@ -35,9 +35,17 @@ function getProvinces(PDO $pdo)
 $provinces = getProvinces($pdo);
 
 if (isset($_POST["chef_codigo"])) {
-    $chef = getChefs($pdo, (int)$_POST["chef_codigo"]);
+    try {
+        $chef = getChefs($pdo, (int)$_POST["chef_codigo"]);
+    } catch (Exception $e) {
+        error_log("ERROR: " . $e->getMessage() . "\n");
+    }
 } elseif (isset($_GET["chef_codigo"])) {
-    $chef = getChefs($pdo, (int)$_GET["chef_codigo"]);
+    try {
+        $chef = getChefs($pdo, (int)$_GET["chef_codigo"]);
+    } catch (Exception $e) {
+        error_log("ERROR: " . $e->getMessage() . "\n");
+    }
 }
 
 if (isset ($_POST["delete"])) {
