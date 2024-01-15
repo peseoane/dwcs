@@ -24,17 +24,19 @@ readonly class dbUtils
         return parse_ini_file($configFilePath);
     }
 
-    public function getPdo(): PDO
+    public function getPdo(): PDO | false
     {
         try {
             $pdo = new PDO($this->MYSQL_DSN, $this->MYSQL_USER, $this->MYSQL_ROOT_PASSWORD);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             error_log("Connected successfully to: " . $this->MYSQL_DSN);
-            return $pdo;
         } catch (PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
             error_log("Connection failed: " . $e->getMessage());
-            exit();
+            return false;
+        } finally {
+            error_log("Finally block");
+            return $pdo;
         }
     }
 }
