@@ -6,7 +6,8 @@ $pdo = (new dbUtils(".db"))->getPdo();
 
 function getChefs(PDO $pdo, int $codigo)
 {
-    $sqlSentence = "SELECT chef.codigo,
+    try {
+        $sqlSentence = "SELECT chef.codigo,
                            chef.nombre,
                            chef.apellido1,
                            chef.apellido2,
@@ -19,33 +20,40 @@ function getChefs(PDO $pdo, int $codigo)
     FROM chef 
     JOIN provincia ON chef.cod_provincia = provincia.codigo
     WHERE chef.codigo = :chef_codigo";
-    $stmt = $pdo->prepare($sqlSentence);
-    $stmt->execute(["chef_codigo" => $codigo]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $pdo->prepare($sqlSentence);
+        $stmt->execute(["chef_codigo" => $codigo]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        error_log("ERROR: " . $e->getMessage() . "\n");
+        throw $e; // No tiene sentido continuar si no podemos obtener los datos del chef
+    } finally {
+        error_log("ALARM: shutdown due to DB trashing");
+    }
+
 }
 
 function getProvinces(PDO $pdo)
 {
-    $sqlSentence = "SELECT * FROM provincia";
-    $stmt = $pdo->prepare($sqlSentence);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    try {
+        $sqlSentence = "SELECT * FROM provincia";
+        $stmt = $pdo->prepare($sqlSentence);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        error_log("ERROR: " . $e->getMessage() . "\n");
+        throw $e; // No tiene sentido continuar si no podemos obtener los datos del chef
+    } finally {
+        error_log("ALARM: shutdown due to DB trashing");
+    }
 }
 
 $provinces = getProvinces($pdo);
 
 if (isset($_POST["chef_codigo"])) {
-    try {
-        $chef = getChefs($pdo, (int)$_POST["chef_codigo"]);
-    } catch (Exception $e) {
-        error_log("ERROR: " . $e->getMessage() . "\n");
-    }
+    $chef = getChefs($pdo, (int)$_POST["chef_codigo"]);
+
 } elseif (isset($_GET["chef_codigo"])) {
-    try {
-        $chef = getChefs($pdo, (int)$_GET["chef_codigo"]);
-    } catch (Exception $e) {
-        error_log("ERROR: " . $e->getMessage() . "\n");
-    }
+    $chef = getChefs($pdo, (int)$_GET["chef_codigo"]);
 }
 
 if (isset ($_POST["delete"])) {
