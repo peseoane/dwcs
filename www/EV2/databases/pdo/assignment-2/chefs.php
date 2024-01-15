@@ -62,11 +62,10 @@ if (isset ($_POST["delete"])) {
 
         $pdo->commit();
     } catch (Exception $e) {
-        $pdo->rollBack();
+        error_log("ERROR: " . $e->getMessage() . "\n");
         throw $e;
     } finally {
-        error_log("ERROR: " . $e->getMessage() . "\n");
-        $pdo = null;
+        error_log("WARN: Se ha ejecutado un DELETE");
     }
     header("Location: assignment-2.php");
 }
