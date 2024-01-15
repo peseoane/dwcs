@@ -13,6 +13,12 @@
     <option name="highlightLevel" value="WARNING" />
     <option name="transferred" value="true" />
   </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/www/vendor/composer" />
+      <path value="$PROJECT_DIR$/www/vendor/ycms/krumo" />
+    </include_path>
+  </component>
   <component name="PhpInterpreters">
     <interpreters>
       <interpreter id="bbafee41-b24b-4d11-b09c-4e7bc178ae44" name="php8.2@compose" home="docker-compose://DATA" auto="false" debugger_id="php.debugger.XDebug">
