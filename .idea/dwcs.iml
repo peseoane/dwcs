@@ -2,8 +2,8 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/www/EV1/examenDiciembre/hotfix" isTestSource="false" packagePrefix="App" />
-      <sourceFolder url="file://$MODULE_DIR$/www/examenDiciembre/hotfix" isTestSource="false" packagePrefix="App" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/www/vendor/ycms/krumo" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
