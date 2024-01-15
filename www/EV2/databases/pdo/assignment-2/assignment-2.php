@@ -10,7 +10,8 @@ declare(strict_types=1);
 require_once "dbUtils.php";
 
 // Apparantly, in PHP we need to cast the object first to be able to be called, probably because interpreted gibberish..
-$pdo = (new dbUtils(".db"))->getPdo();
+# $pdo = (new dbUtils(".db"))->getPdo();
+$pdo = dbUtils::getInstance()->getPdo();
 
 // Using the previous table as a reference, we need to show the recipe, difficulty, ETA and chef name
 // when clicking on the recipe name, we need to show the ingredients and the steps to cook it.

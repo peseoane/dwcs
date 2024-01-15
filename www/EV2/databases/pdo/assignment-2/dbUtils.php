@@ -1,19 +1,22 @@
 <?php
 declare (strict_types=1);
 
-class dbUtils
+require_once "Singleton.php";
+
+class dbUtils extends Singleton
 {
     readonly private string $MYSQL_USER;
     readonly private string $MYSQL_ROOT_PASSWORD;
     readonly private string $MYSQL_HOST;
     readonly private string $MYSQL_DB;
     readonly private string $MYSQL_DSN;
-    static int $instanceCount = 0;
+    readonly private string $configFilePath;
 
-    public function __construct(string $configFilePath)
+    public function __construct()
     {
-        error_log("dbUtils constructor: number of instances: " . self::$instanceCount++);
-        $db_config = $this->getDataFromConfigFile($configFilePath);
+        parent::__construct();
+        $this->configFilePath = ".db";
+        $db_config = $this->getDataFromConfigFile($this->configFilePath);
         $this->MYSQL_USER = $db_config["MYSQL_USER"];
         $this->MYSQL_ROOT_PASSWORD = $db_config["MYSQL_ROOT_PASSWORD"];
         $this->MYSQL_HOST = $db_config["MYSQL_HOST"];

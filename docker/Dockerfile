@@ -8,5 +8,5 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN mount=type=cache,target='/usr/local/lib/php' \
     && pecl install xdebug
 
-# RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli && \
-#    docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql
+ RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli && \
+    docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql

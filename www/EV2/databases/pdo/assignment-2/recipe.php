@@ -2,7 +2,8 @@
 declare(strict_types=1);
 
 require_once "dbUtils.php";
-$pdo = (new dbUtils(".db"))->getPdo();
+# $pdo = (new dbUtils(".db"))->getPdo();
+$pdo = dbUtils::getInstance()->getPdo();
 
 # require_once "assignment-2.php";
 
