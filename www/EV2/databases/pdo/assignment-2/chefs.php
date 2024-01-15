@@ -79,7 +79,7 @@ if (isset ($_POST["delete"])) {
         $pdo->commit();
     } catch (Exception $e) {
         error_log("ERROR: " . $e->getMessage() . "\n");
-        throw $e;
+        throw $e; // Keep moving the blame upstream, I'm not dealing with this here, rollback and let the caller handle it
     } finally {
         error_log("WARN: Se ha ejecutado un DELETE");
     }
