@@ -14,7 +14,7 @@ services:
       - './config/apache2/sites-enabled/:/etc/apache2/sites-enabled'
       - './config/apache2/sites-available/:/etc/apache2/sites-available/'
       - './config/apache2/mods-available/:/etc/apache2/mods-available/'
-      - './www/:/var/www'
+      - './www/:/var/www/html/'
     ports:
       - "8080:80"
     tty: true
