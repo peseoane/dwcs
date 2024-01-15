@@ -1,16 +1,18 @@
 <?php
 declare (strict_types=1);
 
-readonly class dbUtils
+class dbUtils
 {
-    private string $MYSQL_USER;
-    private string $MYSQL_ROOT_PASSWORD;
-    private string $MYSQL_HOST;
-    private string $MYSQL_DB;
-    private string $MYSQL_DSN;
+    readonly private string $MYSQL_USER;
+    readonly private string $MYSQL_ROOT_PASSWORD;
+    readonly private string $MYSQL_HOST;
+    readonly private string $MYSQL_DB;
+    readonly private string $MYSQL_DSN;
+    static int $instanceCount = 0;
 
     public function __construct(string $configFilePath)
     {
+        error_log("dbUtils constructor: number of instances: " . self::$instanceCount++);
         $db_config = $this->getDataFromConfigFile($configFilePath);
         $this->MYSQL_USER = $db_config["MYSQL_USER"];
         $this->MYSQL_ROOT_PASSWORD = $db_config["MYSQL_ROOT_PASSWORD"];
@@ -19,12 +21,13 @@ readonly class dbUtils
         $this->MYSQL_DSN = "mysql:host=" . $this->MYSQL_HOST . ";dbname=" . $this->MYSQL_DB;
     }
 
-    private function getDataFromConfigFile(string $configFilePath): mixed /** any vibes... */
+    private function getDataFromConfigFile(string $configFilePath): mixed
+        /** any vibes... */
     {
         return parse_ini_file($configFilePath);
     }
 
-    public function getPdo(): PDO | false
+    public function getPdo(): PDO|false
     {
         try {
             $pdo = new PDO($this->MYSQL_DSN, $this->MYSQL_USER, $this->MYSQL_ROOT_PASSWORD);

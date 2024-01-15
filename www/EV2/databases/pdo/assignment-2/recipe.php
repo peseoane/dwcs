@@ -8,14 +8,20 @@ $pdo = (new dbUtils(".db"))->getPdo();
 
 if (isset($_GET["receta_nombre"])) {
     // Table ingrediente and receta are linked by the table receta_ingrediente
-    $sqlSentence = "SELECT ingrediente.nombre AS ingrediente_nombre,
+    try {
+        $sqlSentence = "SELECT ingrediente.nombre AS ingrediente_nombre,
                            receta_ingrediente.cantidad AS receta_ingrediente_cantidad
                     FROM receta_ingrediente JOIN ingrediente ON receta_ingrediente.cod_ingrediente = ingrediente.codigo
                     WHERE receta_ingrediente.cod_receta = (SELECT codigo FROM receta WHERE nombre = :receta_nombre)";
-    $stmt = $pdo->prepare($sqlSentence);
-    $stmt->execute(["receta_nombre" => $_GET["receta_nombre"]]);
-    $ingredientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+        $stmt = $pdo->prepare($sqlSentence);
+        $stmt->execute(["receta_nombre" => $_GET["receta_nombre"]]);
+        $ingredientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        error_log("ERROR: " . $e->getMessage() . "\n");
+        throw $e; // No tiene sentido continuar si no podemos obtener los datos del chef
+    } finally {
+        error_log("WARN: se ha cargado una receta");
+    }
 }
 
 ?>
