@@ -1,20 +1,16 @@
 <?php
 declare(strict_types=1);
+require_once "dbUtils.php";
+
 /**
  * ASSIGNMENT 2 :: PDO
  * SEOANE PRADO, PEDRO VICENTE
  * CREATED: 31/12/2023
- * REV:     11/01/2024
+ * REV:     15/01/2024
  */
 
-require_once "dbUtils.php";
-
-// Apparantly, in PHP we need to cast the object first to be able to be called, probably because interpreted gibberish..
-# $pdo = (new dbUtils(".db"))->getPdo();
+# $pdo = (new dbUtils(".db"))->getPdo(); // too java-ish
 $pdo = dbUtils::getInstance()->getPdo();
-
-// Using the previous table as a reference, we need to show the recipe, difficulty, ETA and chef name
-// when clicking on the recipe name, we need to show the ingredients and the steps to cook it.
 
 $sqlSentence = "SELECT receta.nombre AS receta_nombre,
                        receta.dificultad AS receta_dificultad,
@@ -22,20 +18,11 @@ $sqlSentence = "SELECT receta.nombre AS receta_nombre,
                        chef.nombre AS chef_nombre
                 FROM receta JOIN chef ON receta.cod_chef = chef.codigo";
 
-$stmt = $pdo->prepare($sqlSentence);
-$stmt->execute();
-$recetas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// When clicking on the recipe, a GET request is sent to the server with the recipe name as a parameter, and returns the HTML.
-// We're going to replace the $columnName === "receta_nombre" with a link to the recipe page.
-
+$recetas = dbUtils::getInstance()->runQueryAssoc($sqlSentence);
 $recetas = array_map(function ($receta) {
     $receta["receta_nombre"] = "<a href='recipe.php?receta_nombre=" . $receta["receta_nombre"] . "'>" . $receta["receta_nombre"] . "</a>";
     return $receta;
 }, $recetas);
-
-// A query for the chefs NOMBRE APELLIDO NOMBRE ARTISTICO but next column we're gonna add to the GET endpoint a route
-// to edit the chef registration.
 
 $sqlSentence = "SELECT chef.codigo,
        chef.nombre, 
@@ -43,14 +30,16 @@ $sqlSentence = "SELECT chef.codigo,
        chef.apellido2, 
        chef.nombreartistico 
 FROM chef";
-$stmt = $pdo->prepare($sqlSentence);
-$stmt->execute();
-$chefs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// I'm lazy
+
+$chefs = dbUtils::getInstance()->runQueryAssoc($sqlSentence);
+
+// Because I'm too lazy to type two words
 $chefs = array_map(function ($chef) {
     $chef["apellidos"] = $chef["apellido1"] . " " . $chef["apellido2"];
     return $chef;
 }, $chefs);
+
+// Don't do this crap at home, kids, this is not async friendly and will hurt your feelings later on
 $chefs = array_map(function ($chef) {
     unset($chef["apellido1"]);
     unset($chef["apellido2"]);

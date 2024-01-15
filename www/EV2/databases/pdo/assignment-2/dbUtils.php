@@ -1,7 +1,7 @@
 <?php
 declare (strict_types=1);
 
-require_once "Singleton.php";
+require_once "singleton.php";
 
 class dbUtils extends Singleton
 {
@@ -11,6 +11,7 @@ class dbUtils extends Singleton
     readonly private string $MYSQL_DB;
     readonly private string $MYSQL_DSN;
     readonly private string $configFilePath;
+    protected PDO $PDO; // singleton util... should be not static innit??
 
     public function __construct()
     {
@@ -22,9 +23,11 @@ class dbUtils extends Singleton
         $this->MYSQL_HOST = $db_config["MYSQL_HOST"];
         $this->MYSQL_DB = $db_config["MYSQL_DB"];
         $this->MYSQL_DSN = "mysql:host=" . $this->MYSQL_HOST . ";dbname=" . $this->MYSQL_DB;
+        $this->PDO = (new PDO($this->MYSQL_DSN, $this->MYSQL_USER, $this->MYSQL_ROOT_PASSWORD));
+        $this->PDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    private function getDataFromConfigFile(string $configFilePath): mixed
+    private function getDataFromConfigFile(string $configFilePath): array|false
         /** any vibes... */
     {
         return parse_ini_file($configFilePath);
@@ -32,17 +35,64 @@ class dbUtils extends Singleton
 
     public function getPdo(): PDO|false
     {
+        return $this->PDO;
+    }
+
+    public function runQueryAssoc(string $SQLSentence, array $params = []): array
+    {
         try {
-            $pdo = new PDO($this->MYSQL_DSN, $this->MYSQL_USER, $this->MYSQL_ROOT_PASSWORD);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            error_log("Connected successfully to: " . $this->MYSQL_DSN);
+            $stmt = $this->getPdo()->prepare($SQLSentence);
+            $stmt->execute($params);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            error_log("Query executed successfully: " . $SQLSentence);
         } catch (PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
-            error_log("Connection failed: " . $e->getMessage());
-            return false;
+            echo "Query failed: " . $e->getMessage();
+            error_log("Query failed: " . $e->getMessage());
+            return [];
         } finally {
-            error_log("Finally block");
-            return $pdo;
+            return $result;
         }
     }
+
+
+    public function runTransactions(array $SQLSentences, array $params): bool
+    {
+        try {
+            $state = $this->getPdo();
+            $state->beginTransaction();
+            for ($i = 0; $i < count($SQLSentences); $i++) {
+                $stmt = $state->prepare($SQLSentences[$i]);
+                $stmt->execute($params[$i]);
+                error_log("Transaction executed successfully: " . $SQLSentences[$i] . " with params: " . json_encode($params[$i]));
+            }
+            $state->commit();
+            error_log("Transaction executed successfully:");
+        } catch (PDOException $e) {
+            $state->rollBack();
+            error_log("Transaction failed: " . $e->getMessage());
+            return false;
+        } finally {
+            return true;
+        }
+    }
+
+
+    public function getHeaders(array $SQLRESULLT): array
+    {
+        try {
+            $headers = array_keys($SQLRESULLT[0]);
+            error_log("Headers obtained successfully");
+        } catch (PDOException $e) {
+            error_log("Headers failed: ¿Empty space?" . $e->getMessage());
+            return ["YO, THERE WAS AN ATTEMPT TO ACCESS AN EMPTY SPACE"];
+        } finally {
+            return $headers;
+        }
+    }
+
+    public function freePdo(): void
+    {
+        // TODO: Implement freePdo() method.
+    }
+
 }
