@@ -8,8 +8,13 @@ services:
     volumes:
       - './config/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini'
       - './config/php/php.ini:/usr/local/etc/php/php.ini'
+      - './config/apache2/apache2.conf:/etc/apache2/apache2.conf'
+      - './config/apache2/ports.conf:/etc/apache2/ports.conf'
+      - './config/apache2/sites-available/:/etc/apache2/sites-available'
+      - './config/apache2/sites-enabled/:/etc/apache2/sites-enabled'
+      - './config/apache2/sites-available/:/etc/apache2/sites-available/'
+      - './config/apache2/mods-available/:/etc/apache2/mods-available/'
       - './www/:/var/www'
-      - './config/apache2/:/etc/apache2/'
     ports:
       - "8080:80"
     tty: true
