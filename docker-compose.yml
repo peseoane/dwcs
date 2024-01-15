@@ -8,13 +8,26 @@ services:
     volumes:
       - './config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini'
       - './config/php.ini:/usr/local/etc/php/php.ini'
-      - './www/:/var/www/html'
+      - './www/:/var/www'
+      - './config/apache2/:/etc/apache2/'
     ports:
       - "8080:80"
     tty: true
+    user: 1000:1000
     working_dir: /var/www/html
     environment:
       XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9003 remote_enable=1
+    networks:
+      - dwcs
+
+  dns:
+    image: ubuntu/bind9
+    container_name: dwcs-dns
+    volumes:
+      - ./config/dns:/etc/bind
+    ports:
+      - "53:53"
+      - "53:53/udp"
     networks:
       - dwcs
 
