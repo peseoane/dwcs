@@ -64,6 +64,9 @@ if (isset ($_POST["delete"])) {
     } catch (Exception $e) {
         $pdo->rollBack();
         throw $e;
+    } finally {
+        error_log("ERROR: " . $e->getMessage() . "\n");
+        $pdo = null;
     }
     header("Location: assignment-2.php");
 }

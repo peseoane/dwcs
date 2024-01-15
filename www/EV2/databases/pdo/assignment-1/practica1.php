@@ -19,7 +19,7 @@ try {
     exit();
 }
 
-$sql = "SELECT  receta.*,
+$sql = "SELECT  receta.*,apellido2
                 chef.nombre AS chef_name
         FROM receta LEFT JOIN chef ON receta.cod_chef = chef.codigo";
 $stmt = $pdo->prepare($sql);
