@@ -9,38 +9,50 @@ require_once "dbUtils.php";
  * REV:     15/01/2024
  */
 
-# $pdo = (new dbUtils(".db"))->getPdo(); // too java-ish
-$pdo = dbUtils::getInstance()->getPdo();
-
-$sqlSentence = "SELECT receta.nombre AS receta_nombre,
-                       receta.dificultad AS receta_dificultad,
-                       receta.tiempo AS receta_tiempo,
-                       chef.nombre AS chef_nombre
+$sqlSentence = "SELECT receta.nombre AS 'Receta',
+                       receta.dificultad AS 'Dificultad',
+                       receta.tiempo AS 'Tiempo',
+                       chef.nombre AS 'Chef'
                 FROM receta JOIN chef ON receta.cod_chef = chef.codigo";
+/*
+ * We don't create a new object of dbUtils because we are using the singleton pattern.
+ * So, we call the static method getInstance() to get the instance of the class.
+ * Singleton will take care of creating the object if it doesn't exist for us.
+ */
 
 $recetas = dbUtils::getInstance()->runQueryAssoc($sqlSentence);
+
+/*
+ * Now we are going to modify the array of recetas to add a link to each recipe.
+ */
 $recetas = array_map(function ($receta) {
-    $receta["receta_nombre"] = "<a href='recipe.php?receta_nombre=" . $receta["receta_nombre"] . "'>" . $receta["receta_nombre"] . "</a>";
+    $receta["Receta"] = "
+      <a href='recipe.php?receta_nombre=" .
+        $receta["Receta"] . "'>" .
+        $receta["Receta"] . "
+      </a>";
     return $receta;
 }, $recetas);
 
+/*
+ * Now we are going to get the list of chefs.
+ */
 $sqlSentence = "SELECT chef.codigo,
-       chef.nombre, 
+       chef.nombre AS 'Nombre',
        chef.apellido1,
        chef.apellido2, 
-       chef.nombreartistico 
+       chef.nombreartistico AS 'Nombre artístico'
 FROM chef";
 
+/*
+ * Again, we don't create a new object of dbUtils because we are using the singleton pattern.
+ */
 $chefs = dbUtils::getInstance()->runQueryAssoc($sqlSentence);
 
-// Because I'm too lazy to type two words
+
+ // If you look closely, apellido1 and apellido2 will need to be concatenated.
 $chefs = array_map(function ($chef) {
     $chef["apellidos"] = $chef["apellido1"] . " " . $chef["apellido2"];
-    return $chef;
-}, $chefs);
-
-// Don't do this crap at home, kids, this is not async friendly and will hurt your feelings later on
-$chefs = array_map(function ($chef) {
     unset($chef["apellido1"]);
     unset($chef["apellido2"]);
     return $chef;
@@ -77,7 +89,7 @@ $chefs = array_map(function ($chef) {
 <table>
     <tr>
         <?php foreach (array_keys($chefs[0]) as $columnName): ?>
-            <th><?= $columnName ?></th>
+            <?= $columnName === "codigo" ? "" : "<th>{$columnName}</th>" ?>
         <?php endforeach; ?>
     </tr>
     <?php foreach ($chefs as $chef): ?>
@@ -85,6 +97,8 @@ $chefs = array_map(function ($chef) {
             <?php foreach ($chef as $columnName => $columnValue): ?>
                 <?= $columnName === "codigo" ? "" : "<td>{$columnValue}</td>" ?>
             <?php endforeach; ?>
+            <!-- ¿Did you notice that we are passing the chef's code as a GET parameter? to the future ENDPOINT
+            that will be the chef's edition page called chefs.php?chef_codigo=PARAM ? -->
             <td><a href="chefs.php?chef_codigo=<?= $chef["codigo"] ?>">Editar</a></td>
         </tr>
     <?php endforeach; ?>

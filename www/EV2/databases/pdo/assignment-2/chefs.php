@@ -2,36 +2,48 @@
 declare(strict_types=1);
 require_once "dbUtils.php";
 
-# $pdo = (new dbUtils(".db"))->getPdo();
-$pdo = dbUtils::getInstance()->getPdo();
-
-function getChefByID(int $codigo)
+/*
+ * We're going to use this function to get the chef by its ID because:
+ * 1. We need to use it in the POST and GET methods, chefs can be accesed by both methods, remember the main page!
+ * 2. We don't like to repeat code!
+ */
+function getChefByID(int $code)
 {
+    $sqlParam = ["chef_codigo" => $code];
     $sqlSentence = "SELECT chef.codigo,
                            chef.nombre,
                            chef.apellido1,
                            chef.apellido2,
-                           chef.nombreartistico,
-                           chef.sexo,
-                           chef.fecha_nacimiento,
+                           chef.nombreartistico, 
+                           chef.sexo, 
+                           chef.fecha_nacimiento, 
                            chef.localidad,
-                           chef.cod_provincia,
-                           provincia.nombre as provincia
-    FROM chef 
-    JOIN provincia ON chef.cod_provincia = provincia.codigo
-    WHERE chef.codigo = :chef_codigo";
-    $param = ["chef_codigo" => $codigo];
-    return dbUtils::getInstance()->runQueryAssoc($sqlSentence, $param)[0];
+                           chef.cod_provincia, 
+                           provincia.nombre 
+      FROM chef 
+      JOIN provincia ON chef.cod_provincia = provincia.codigo
+      WHERE chef.codigo = :chef_codigo";
+    return dbUtils::getInstance()->runQueryAssoc($sqlSentence, $sqlParam)[0];
 }
 
-function getProvinces()
+/*
+ * Return can be false!
+ * Also... as you see once implemented we can start enjoying the benefits of the singleton pattern and oneliners!
+ * Because we moved all the logic and error handling flow to the dbUtils class.
+ */
+function getProvinces(): array | false
 {
-    $sqlSentence = "SELECT * FROM provincia";
-    return dbUtils::getInstance()->runQueryAssoc($sqlSentence);
+    return dbUtils::getInstance()->runQueryAssoc("SELECT * FROM provincia");
 }
 
+/*
+ * If you ask why this is a function for just ONE call, let me tell you... CACHE!
+ */
 $provinces = getProvinces();
 
+/*
+ * Keep in mind that all the received data from a form is a String, so we need to cast it to the correct type.
+ */
 if (isset($_POST["chef_codigo"])) {
     $chef = getChefByID((int)$_POST["chef_codigo"]);
 
@@ -39,8 +51,13 @@ if (isset($_POST["chef_codigo"])) {
     $chef = getChefByID((int)$_GET["chef_codigo"]);
 }
 
+/*
+ * Due to the DB not having a cascade delete, we need to delete the recipes first and then the chef etc...
+ * So, we need to create a transaction, but we're ussing a method from the dbUtils class, so we just pass an array
+ * of SQL sentences and an array of params. On this particular case we're using the same param for all the sentences.
+ * But we could use different params for each sentence of course.
+ */
 if (isset ($_POST["delete"])) {
-
     $sqlSentences = [
         "DELETE FROM receta_ingrediente WHERE cod_receta IN (SELECT codigo FROM receta WHERE cod_chef = :chef_codigo)",
         "DELETE FROM receta WHERE cod_chef = :chef_codigo",
@@ -50,6 +67,10 @@ if (isset ($_POST["delete"])) {
     $param = ["chef_codigo" => $_POST["chef"]["codigo"]];
     $res = dbUtils::getInstance()->runTransactions($sqlSentences, [$param, $param, $param, $param]);
 
+    /*
+     * Remember when the called method was implemented with an array | false return type?
+     * Well, we can use it to check if the transaction was successful or not!
+     */
     if ($res) {
         header("Location: assignment-2.php");
     } else {
@@ -57,6 +78,11 @@ if (isset ($_POST["delete"])) {
     }
 }
 
+/*
+ * Since our form uses an associative array, we can use the same array to update the chef.
+ * You just need to keep a close track of the names of the inputs to be the same as the names of the columns in the DB.
+ * This way, you can use the same array to update the chef, no manual mapping needed!
+ */
 if (isset($_POST["update"])) {
     $sqlSentence = "UPDATE chef SET nombre = :nombre,
                                     apellido1 = :apellido1,

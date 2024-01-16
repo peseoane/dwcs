@@ -11,9 +11,14 @@ class dbUtils extends Singleton
     readonly private string $MYSQL_DB;
     readonly private string $MYSQL_DSN;
     readonly private string $configFilePath;
-    protected PDO $PDO; // singleton util... should be not static innit??
+    protected PDO $PDO;
 
-    public function __construct()
+    /*
+     * We're going to use the singleton pattern to avoid creating multiple instances of the same object.
+     * This is why this is PROTECTED, a private constructor yes, this way only the "mother" class can create
+     * an instance of this class.
+     */
+    protected function __construct()
     {
         parent::__construct();
         $this->configFilePath = ".db";
@@ -28,16 +33,25 @@ class dbUtils extends Singleton
     }
 
     private function getDataFromConfigFile(string $configFilePath): array|false
-        /** any vibes... */
     {
         return parse_ini_file($configFilePath);
     }
 
-    public function getPdo(): PDO|false
+    /**
+     * @Description: This method will return the PDO object, should not be used by the user directly.
+     * @return PDO|false
+     */
+    private function getPdo(): PDO|false
     {
         return $this->PDO;
     }
 
+    /**
+     * @Description: This method will run a query with the SQL sentence and params provided.
+     * @param string $SQLSentence SQL sentence to execute.
+     * @param array $params Array of params to execute. If none provided, an empty array will be used.
+     * @return array
+     */
     public function runQueryAssoc(string $SQLSentence, array $params = []): array
     {
         try {
@@ -48,14 +62,22 @@ class dbUtils extends Singleton
         } catch (PDOException $e) {
             echo "Query failed: " . $e->getMessage();
             error_log("Query failed: " . $e->getMessage());
-            return [];
+            return [
+
+            ];
         } finally {
             return $result;
         }
     }
 
 
-    public function runTransactions(array $SQLSentences, array $params): bool
+    /**
+     * @Description: This method will run a transaction with the SQL sentences and params provided.
+     * @param array $SQLSentences Array of SQL sentences to execute.
+     * @param array $params Array of params to execute. If none provided, an empty array will be used.
+     * @return bool
+     */
+    public function runTransactions(array $SQLSentences, array $params = []): bool
     {
         try {
             $state = $this->getPdo();
@@ -77,6 +99,12 @@ class dbUtils extends Singleton
     }
 
 
+    /**
+     * @Description: This method will return the headers of a SQL result, but handling possible errors.
+     * @param array $SQLRESULLT
+     * @return array
+     * @throws PDOException
+     */
     public function getHeaders(array $SQLRESULLT): array
     {
         try {

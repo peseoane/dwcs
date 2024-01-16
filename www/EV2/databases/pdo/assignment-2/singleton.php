@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * https://refactoring.guru/es/design-patterns/singleton/php/example#example-1
+ */
 class Singleton
 {
     /**

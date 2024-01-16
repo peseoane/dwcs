@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
-
 require_once "dbUtils.php";
-# $pdo = (new dbUtils(".db"))->getPdo();
-$pdo = dbUtils::getInstance()->getPdo();
 
+/*
+ * Always that you have an "if" with a declaration...is it recommended to declare outside the scope of the "if".
+ * Do not deal with stupid errors like "undefined variable" or "undefined index"... declare your variables properly!
+ */
 $ingredientes = [];
 if (isset($_GET["receta_nombre"])) {
     $sqlSentence = "SELECT ingrediente.nombre AS ingrediente_nombre,
