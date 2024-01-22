@@ -2,8 +2,41 @@
 declare(strict_types=1);
 
 /**
- * https://refactoring.guru/es/design-patterns/singleton/php/example#example-1
+ * The Product interface declares the operations that all concrete products must
+ * implement.
  */
+interface Product
+{
+    public function operation(): string;
+}
+
+
+abstract class Creator
+{
+    /**
+     * Note that the Creator may also provide some default implementation of the
+     * factory method.
+     */
+    abstract public function factoryMethod(): Product;
+
+    /**
+     * Also note that, despite its name, the Creator's primary responsibility is
+     * not creating products. Usually, it contains some core business logic that
+     * relies on Product objects, returned by the factory method. Subclasses can
+     * indirectly change that business logic by overriding the factory method
+     * and returning a different type of product from it.
+     */
+    public function someOperation(): string
+    {
+        // Call the factory method to create a Product object.
+        $product = $this->factoryMethod();
+        // Now, use the product.
+        $result = "Creator: The same creator's code has just worked with " .
+            $product->operation();
+
+        return $result;
+    }
+}
 class Singleton
 {
     /**

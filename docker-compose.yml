@@ -3,36 +3,18 @@ services:
   php8:
     container_name: dwcs-php8
     build:
-      context: docker
+      context: .
       dockerfile: Dockerfile
     volumes:
-      - './config/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini'
-      - './config/php/php.ini:/usr/local/etc/php/php.ini'
-      - './config/apache2/apache2.conf:/etc/apache2/apache2.conf'
-      - './config/apache2/ports.conf:/etc/apache2/ports.conf'
-      - './config/apache2/sites-available/:/etc/apache2/sites-available'
-      - './config/apache2/sites-enabled/:/etc/apache2/sites-enabled'
-      - './config/apache2/sites-available/:/etc/apache2/sites-available/'
-      - './config/apache2/mods-available/:/etc/apache2/mods-available/'
-      - './www/:/var/www/html/'
+      - './config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini'
+      - './config/php.ini:/usr/local/etc/php/php.ini'
+      - './www/:/var/www/html'
     ports:
       - "8080:80"
     tty: true
-    user: 1000:1000
     working_dir: /var/www/html
     environment:
       XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9003 remote_enable=1
-    networks:
-      - dwcs
-
-  dns:
-    image: ubuntu/bind9
-    container_name: dwcs-dns
-    volumes:
-      - ./config/dns:/etc/bind
-    ports:
-      - "53:53"
-      - "53:53/udp"
     networks:
       - dwcs
 
@@ -66,6 +48,28 @@ services:
     networks:
       - dwcsLan
       - dwcs
+
+#  php7:
+#    container_name: dwcs-php7
+#    #image: phpstorm/php-apache:8.2-xdebug3.2
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-php7
+#    hostname: php74-xdebug32
+#    volumes:
+#      - ./config/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+#      - ./config/php.ini:/usr/local/etc/php/php.ini
+#      - './www/:/var/www/html'
+#    ports:
+#      - "8081:80"
+#    working_dir: /var/www/html
+#    environment:
+#      XDEBUG_CONFIG: remote_host=host.docker.internal remote_port=9003 remote_enable=1
+#    networks:
+#      - dwcs
+#    # wait to php8 to be ready
+#    depends_on:
+#      - php8
 
 networks:
   dwcsLan:
