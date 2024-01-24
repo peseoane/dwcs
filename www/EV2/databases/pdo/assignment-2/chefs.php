@@ -31,7 +31,7 @@ function getChefByID(int $code)
  * Also... as you see once implemented we can start enjoying the benefits of the singleton pattern and oneliners!
  * Because we moved all the logic and error handling flow to the dbUtils class.
  */
-function getProvinces(): array | false
+function getProvinces(): array|false
 {
     return dbUtils::getInstance()->runQueryAssoc("SELECT * FROM provincia");
 }
@@ -45,10 +45,9 @@ $provinces = getProvinces();
  * Keep in mind that all the received data from a form is a String, so we need to cast it to the correct type.
  */
 if (isset($_POST["chef_codigo"])) {
-    $chef = getChefByID((int)$_POST["chef_codigo"]);
-
+    $chef = getChefByID((int) $_POST["chef_codigo"]);
 } elseif (isset($_GET["chef_codigo"])) {
-    $chef = getChefByID((int)$_GET["chef_codigo"]);
+    $chef = getChefByID((int) $_GET["chef_codigo"]);
 }
 
 /*
@@ -57,15 +56,20 @@ if (isset($_POST["chef_codigo"])) {
  * of SQL sentences and an array of params. On this particular case we're using the same param for all the sentences.
  * But we could use different params for each sentence of course.
  */
-if (isset ($_POST["delete"])) {
+if (isset($_POST["delete"])) {
     $sqlSentences = [
         "DELETE FROM receta_ingrediente WHERE cod_receta IN (SELECT codigo FROM receta WHERE cod_chef = :chef_codigo)",
         "DELETE FROM receta WHERE cod_chef = :chef_codigo",
         "DELETE FROM libro WHERE cod_chef = :chef_codigo",
-        "DELETE FROM chef WHERE codigo = :chef_codigo"
+        "DELETE FROM chef WHERE codigo = :chef_codigo",
     ];
     $param = ["chef_codigo" => $_POST["chef"]["codigo"]];
-    $res = dbUtils::getInstance()->runTransactions($sqlSentences, [$param, $param, $param, $param]);
+    $res = dbUtils::getInstance()->runTransactions($sqlSentences, [
+        $param,
+        $param,
+        $param,
+        $param,
+    ]);
 
     /*
      * Remember when the called method was implemented with an array | false return type?
@@ -74,7 +78,9 @@ if (isset ($_POST["delete"])) {
     if ($res) {
         header("Location: assignment-2.php");
     } else {
-        error_log("Error deleting chef and its recipes, BAD TRANSACTION ROLLBACK...");
+        error_log(
+            "Error deleting chef and its recipes, BAD TRANSACTION ROLLBACK..."
+        );
     }
 }
 
@@ -100,7 +106,6 @@ if (isset($_POST["update"])) {
     }
     header("Location: assignment-2.php");
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -117,7 +122,9 @@ if (isset($_POST["update"])) {
     <tr>
       <td>
         <label for="chef[codigo]">Código
-          <input type="text" name="chef[codigo]" value="<?= $chef["codigo"] ?>" readonly>
+          <input type="text" name="chef[codigo]" value="<?= $chef[
+              "codigo"
+          ] ?>" readonly>
         </label>
       </td>
     </tr>
@@ -131,21 +138,27 @@ if (isset($_POST["update"])) {
     <tr>
       <td>
         <label for="chef[apellido1]">Primer apellido
-          <input type="text" name="chef[apellido1]" value="<?= $chef["apellido1"] ?>">
+          <input type="text" name="chef[apellido1]" value="<?= $chef[
+              "apellido1"
+          ] ?>">
         </label>
       </td>
     </tr>
     <tr>
       <td>
         <label for="chef[apellido2]">Segundo apellido
-          <input type="text" name="chef[apellido2]" value="<?= $chef["apellido2"] ?>">
+          <input type="text" name="chef[apellido2]" value="<?= $chef[
+              "apellido2"
+          ] ?>">
         </label>
       </td>
     </tr>
     <tr>
       <td>
         <label for="chef[nombreartistico]">Nombre artístico
-          <input type="text" name="chef[nombreartistico]" value="<?= $chef["nombreartistico"] ?>">
+          <input type="text" name="chef[nombreartistico]" value="<?= $chef[
+              "nombreartistico"
+          ] ?>">
         </label>
       </td>
     </tr>
@@ -153,8 +166,12 @@ if (isset($_POST["update"])) {
       <td>
         <label for="chef[sexo]">Sexo
           <select name="chef[sexo]">
-            <option value="H" <?= $chef["sexo"] === "H" ? "selected" : "" ?>>Hombre</option>
-            <option value="M" <?= $chef["sexo"] === "M" ? "selected" : "" ?>>Mujer</option>
+            <option value="H" <?= $chef["sexo"] === "H"
+                ? "selected"
+                : "" ?>>Hombre</option>
+            <option value="M" <?= $chef["sexo"] === "M"
+                ? "selected"
+                : "" ?>>Mujer</option>
           </select>
         </label>
       </td>
@@ -162,14 +179,18 @@ if (isset($_POST["update"])) {
     <tr>
       <td>
         <label for="chef[fecha_nacimiento]">Fecha de nacimiento
-          <input type="date" name="chef[fecha_nacimiento]" value="<?= $chef["fecha_nacimiento"] ?>">
+          <input type="date" name="chef[fecha_nacimiento]" value="<?= $chef[
+              "fecha_nacimiento"
+          ] ?>">
         </label>
       </td>
     </tr>
     <tr>
       <td>
         <label for="chef[localidad]">Localidad
-          <input type="text" name="chef[localidad]" value="<?= $chef["localidad"] ?>">
+          <input type="text" name="chef[localidad]" value="<?= $chef[
+              "localidad"
+          ] ?>">
         </label>
       </td>
     </tr>
@@ -186,7 +207,11 @@ if (isset($_POST["update"])) {
           <select name="chef[cod_provincia]">
               <?php foreach ($provinces as $province): ?>
                 <option
-                  value="<?= $province["codigo"] ?>" <?= $chef["cod_provincia"] === $province["codigo"] ? "selected" : "" ?>><?= $province["nombre"] ?></option>
+                  value="<?= $province["codigo"] ?>" <?= $chef[
+    "cod_provincia"
+] === $province["codigo"]
+    ? "selected"
+    : "" ?>><?= $province["nombre"] ?></option>
               <?php endforeach; ?>
           </select>
         </label>

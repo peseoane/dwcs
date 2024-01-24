@@ -10,7 +10,6 @@ interface Product
     public function operation(): string;
 }
 
-
 abstract class Creator
 {
     /**
@@ -31,7 +30,8 @@ abstract class Creator
         // Call the factory method to create a Product object.
         $product = $this->factoryMethod();
         // Now, use the product.
-        $result = "Creator: The same creator's code has just worked with " .
+        $result =
+            "Creator: The same creator's code has just worked with " .
             $product->operation();
 
         return $result;
@@ -50,12 +50,16 @@ class Singleton
      * Singleton's constructor should not be public. However, it can't be
      * private either if we want to allow subclassing.
      */
-    protected function __construct() { }
+    protected function __construct()
+    {
+    }
 
     /**
      * Cloning and unserialization are not permitted for singletons.
      */
-    protected function __clone() { }
+    protected function __clone()
+    {
+    }
 
     public function __wakeup()
     {

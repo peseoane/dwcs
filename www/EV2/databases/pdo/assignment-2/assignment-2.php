@@ -26,10 +26,13 @@ $recetas = dbUtils::getInstance()->runQueryAssoc($sqlSentence);
  * Now we are going to modify the array of recetas to add a link to each recipe.
  */
 $recetas = array_map(function ($receta) {
-    $receta["Receta"] = "
+    $receta["Receta"] =
+        "
       <a href='recipe.php?receta_nombre=" .
-        $receta["Receta"] . "'>" .
-        $receta["Receta"] . "
+        $receta["Receta"] .
+        "'>" .
+        $receta["Receta"] .
+        "
       </a>";
     return $receta;
 }, $recetas);
@@ -49,15 +52,13 @@ FROM chef";
  */
 $chefs = dbUtils::getInstance()->runQueryAssoc($sqlSentence);
 
-
- // If you look closely, apellido1 and apellido2 will need to be concatenated.
+// If you look closely, apellido1 and apellido2 will need to be concatenated.
 $chefs = array_map(function ($chef) {
     $chef["apellidos"] = $chef["apellido1"] . " " . $chef["apellido2"];
     unset($chef["apellido1"]);
     unset($chef["apellido2"]);
     return $chef;
 }, $chefs);
-
 ?>
 
 <!DOCTYPE html>
@@ -99,7 +100,9 @@ $chefs = array_map(function ($chef) {
             <?php endforeach; ?>
             <!-- ¿Did you notice that we are passing the chef's code as a GET parameter? to the future ENDPOINT
             that will be the chef's edition page called chefs.php?chef_codigo=PARAM ? -->
-            <td><a href="chefs.php?chef_codigo=<?= $chef["codigo"] ?>">Editar</a></td>
+            <td><a href="chefs.php?chef_codigo=<?= $chef[
+                "codigo"
+            ] ?>">Editar</a></td>
         </tr>
     <?php endforeach; ?>
 </table>

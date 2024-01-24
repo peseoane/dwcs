@@ -8,30 +8,33 @@ class Form
     public function __construct(array $options)
     {
         foreach ($options as $name => $option) {
-            $type = $option['type'] ?? 'text';
-            $value = $option['value'] ?? '';
-            $selectOptions = $option['options'] ?? [];
+            $type = $option["type"] ?? "text";
+            $value = $option["value"] ?? "";
+            $selectOptions = $option["options"] ?? [];
 
             $this->fields[$name] = [
-                'type' => $type,
-                'value' => $value,
-                'options' => $selectOptions,
+                "type" => $type,
+                "value" => $value,
+                "options" => $selectOptions,
             ];
         }
     }
 
     public function render(): string
     {
-        $html = '<form method="POST" action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '">';
+        $html =
+            '<form method="POST" action="' .
+            htmlspecialchars($_SERVER["PHP_SELF"]) .
+            '">';
 
         foreach ($this->fields as $name => $field) {
-            $type = $field['type'];
-            $value = $field['value'];
-            $selectOptions = $field['options'];
+            $type = $field["type"];
+            $value = $field["value"];
+            $selectOptions = $field["options"];
 
             $html .= "<label for='{$name}'>{$name}</label>";
 
-            if ($type === 'select') {
+            if ($type === "select") {
                 $html .= "<select name='{$name}'>";
                 foreach ($selectOptions as $optionValue => $optionLabel) {
                     $html .= "<option value='{$optionValue}'>{$optionLabel}</option>";
@@ -42,7 +45,7 @@ class Form
             }
         }
 
-        $html .= '</form>';
+        $html .= "</form>";
 
         return $html;
     }

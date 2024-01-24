@@ -15,7 +15,6 @@ class Controls
             if ($i != $totalPages) {
                 $html .= " | ";
             }
-
         }
         $html .= "</div>";
         return $html;

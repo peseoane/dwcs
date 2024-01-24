@@ -17,6 +17,7 @@
     <include_path>
       <path value="$PROJECT_DIR$/www/vendor/composer" />
       <path value="$PROJECT_DIR$/www/vendor/ycms/krumo" />
+      <path value="$PROJECT_DIR$/www/vendor/phpmailer/phpmailer" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
@@ -107,6 +108,11 @@
   </component>
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
+  </component>
+  <component name="PhpUnit">
+    <phpunit_settings>
+      <PhpUnitSettings custom_loader_path="$PROJECT_DIR$/www/vendor/autoload.php" />
+    </phpunit_settings>
   </component>
   <component name="PsalmOptionsConfiguration">
     <option name="transferred" value="true" />

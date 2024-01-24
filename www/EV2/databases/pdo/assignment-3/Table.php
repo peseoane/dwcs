@@ -3,14 +3,16 @@ declare(strict_types=1);
 
 class Table
 {
-
     private string $title;
     private array $headers;
     private array $rows;
     private string $errorMessage;
 
-    public function __construct(string $title = "", array $headers = [], array $rows = [])
-    {
+    public function __construct(
+        string $title = "",
+        array $headers = [],
+        array $rows = []
+    ) {
         $this->title = $title;
         $this->headers = $headers;
         $this->rows = $rows;
@@ -69,7 +71,9 @@ class Table
     public function renderHtml(): string
     {
         if (!empty($this->errorMessage)) {
-            return "<div class='error-message'>" . $this->errorMessage . "</div>";
+            return "<div class='error-message'>" .
+                $this->errorMessage .
+                "</div>";
         }
         $html = "<h2>" . mb_strtoupper($this->title) . "</h2>";
         $html .= "<table>";
@@ -93,5 +97,4 @@ class Table
     {
         $this->errorMessage = $message;
     }
-
 }

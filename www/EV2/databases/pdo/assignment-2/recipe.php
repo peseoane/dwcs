@@ -12,9 +12,10 @@ if (isset($_GET["receta_nombre"])) {
                            receta_ingrediente.cantidad AS receta_ingrediente_cantidad
                     FROM receta_ingrediente JOIN ingrediente ON receta_ingrediente.cod_ingrediente = ingrediente.codigo
                     WHERE receta_ingrediente.cod_receta = (SELECT codigo FROM receta WHERE nombre = :receta_nombre)";
-    $ingredientes = dbUtils::getInstance()->runQueryAssoc($sqlSentence, ["receta_nombre" => $_GET["receta_nombre"]]);
+    $ingredientes = dbUtils::getInstance()->runQueryAssoc($sqlSentence, [
+        "receta_nombre" => $_GET["receta_nombre"],
+    ]);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +28,9 @@ if (isset($_GET["receta_nombre"])) {
 <h1>Recetas</h1>
 <ol>
     <?php foreach ($ingredientes as $ingrediente): ?>
-        <li><?= $ingrediente["ingrediente_nombre"] ?>: <?= $ingrediente["receta_ingrediente_cantidad"] ?> gramos</li>
+        <li><?= $ingrediente["ingrediente_nombre"] ?>: <?= $ingrediente[
+    "receta_ingrediente_cantidad"
+] ?> gramos</li>
     <?php endforeach; ?>
 </ol>
 
