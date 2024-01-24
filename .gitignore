@@ -1,6 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,phpstorm
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,phpstorm
-www/vendor/
+www/vendor/*
+vendor
 ### Node ###
 # Logs
 logs
@@ -256,3 +257,4 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/node,phpstorm
 /nbproject/private/
+/www/EV2/Web_pedidos_restaurantes/vendor/phpmailer/phpmailer/VERSION
