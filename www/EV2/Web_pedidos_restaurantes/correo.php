@@ -57,11 +57,11 @@ function enviar_correo_multiples($lista_correos, $cuerpo, $asunto = "") {
     $mail->SMTPDebug = 0;  // cambiar a 1 o 2 para ver errores
     $mail->SMTPAuth = true;
     $mail->SMTPSecure = "tls";
-    $mail->Host = "iesteis-es.correoseguro.dinaserver.com";
+    $mail->Host = "smtp.dondominio.com";
     $mail->Port = 587;
     $mail->Username = $res[0];  //usuario de gmail
     $mail->Password = $res[1]; //contraseña de gmail          
-    $mail->SetFrom('usuario_correo@gmail.com', 'Sistema de pedidos');
+    $mail->SetFrom('php@pedroseoaneprado.es', 'Sistema de pedidos');
     $mail->Subject = mb_convert_encoding($asunto,'UTF-8');
     $mail->MsgHTML($cuerpo);
     /* Divide la lista de correos por la coma */

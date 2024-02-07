@@ -3,5 +3,5 @@
     <ip>mysql</ip>
     <nombre>pedidos</nombre>
     <usuario>root</usuario>
-    <clave></clave>    
+    <clave>root</clave>
 </configuracion>

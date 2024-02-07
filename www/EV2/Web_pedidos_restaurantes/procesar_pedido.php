@@ -3,13 +3,12 @@
  * Inserta el pedido en la BBDD, enviando correos de confirmación y muestra mensajes
  * de error o de éxito.
  */
-
 /* Comprueba que el usuario haya abierto sesión o redirige */
 require 'correo.php';
 require 'sesiones.php';
 require_once 'bd.php';
 comprobar_sesion();
-?>	
+?>?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,6 +18,7 @@ comprobar_sesion();
     <body>
         <?php
         require 'cabecera.php';
+
         $resul = insertar_pedido($_SESSION['carrito'], $_SESSION['usuario']['codRes']);
         if ($resul === FALSE) {
             echo "No se ha podido realizar el pedido<br>";

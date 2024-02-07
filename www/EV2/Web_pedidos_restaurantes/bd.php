@@ -1,6 +1,7 @@
 <?php
 
-function loadBBDD() {
+function loadBBDD()
+{
     /*
      * Devuelve el puntero a la conexión a la BBDD
      */
@@ -14,7 +15,8 @@ function loadBBDD() {
     }
 }
 
-function leer_config($fichero_config_BBDD, $esquema) {
+function leer_config($fichero_config_BBDD, $esquema)
+{
     /*
      * $fichero_config_BBDD es la ruta del fichero con los datos de conexión a la BBDD
      * $esquema es la ruta del fichero XSD para validar la estructura del fichero anterior
@@ -42,7 +44,8 @@ function leer_config($fichero_config_BBDD, $esquema) {
     return $resul;
 }
 
-function loadPass($nombre) {
+function loadPass($nombre)
+{
     /*
      *  Recupera la contraseña encriptada de la BBDD cuyo usuario (a través del
      *  parámetro nombre) es la dirección de correo del usuario que va a realizar el pedido
@@ -58,7 +61,8 @@ function loadPass($nombre) {
     return $devol;
 }
 
-function comprobar_usuario($nombre, $clave) {
+function comprobar_usuario($nombre, $clave)
+{
 
     /*
      * Comprueba los datos que recibe del formulario del login. Si los datos son correctos
@@ -78,7 +82,8 @@ function comprobar_usuario($nombre, $clave) {
     return $devol;
 }
 
-function cargar_categorias() {
+function cargar_categorias()
+{
     /*
      * Devuelve un puntero con el código y nombre de las categorías de la BBDD
      * o falso si se produjo un error
@@ -96,7 +101,8 @@ function cargar_categorias() {
     return $resul;
 }
 
-function cargar_categoria($codCat) {
+function cargar_categoria($codCat)
+{
     /*
      * Recibe el código de una categoría y devuelve un array con su nombre y descripción.
      * Si hay algún error en la BBDD o la categoría no existe devuelve FALSE
@@ -114,7 +120,8 @@ function cargar_categoria($codCat) {
     return $resul->fetch();
 }
 
-function cargar_productos_categoria($codCat) {
+function cargar_productos_categoria($codCat)
+{
     /*
      * Recibe el código de una categoría y devuelve un puntero (PDOStatement) con los 
      * productos que tienen stock, incluyendo todas las columnas de la BBDD.
@@ -132,7 +139,8 @@ function cargar_productos_categoria($codCat) {
     return $resul;
 }
 
-function cargar_categoria_codProducto($codProd) {
+function cargar_categoria_codProducto($codProd)
+{
     /*
      * Nos devuelve la categoría de un producto indicando su código o FALSE si se
      * ha producido un error.
@@ -150,7 +158,8 @@ function cargar_categoria_codProducto($codProd) {
     return false;
 }
 
-function cargar_productos($codigosProductos) {
+function cargar_productos($codigosProductos)
+{
     /*
      * Obtiene la información de los productos que se le pasa como parámetro en
      * forma de un array de códigos de productos.
@@ -169,7 +178,8 @@ function cargar_productos($codigosProductos) {
         return FALSE;
 }
 
-function insertar_pedido($carrito, $codRes) {
+function insertar_pedido($carrito, $codRes): false|string
+{
     /*
      * Inserta el pedido en la BBDD. Recibe el carrito de la compra y el código del
      * restaurante que realiza el pedido. Si todo va bien, devuelve el código del nuevo 
@@ -196,19 +206,21 @@ function insertar_pedido($carrito, $codRes) {
         $pedido = $bd->lastInsertId();
         // insertar las filas en pedidoproductos
         foreach ($carrito as $codProd => $unidades) {
-            
+
             /**$sql3 = "Select stock from productos where codprod=?";
-            $stmt3 = $bd->prepare($sql3);
-            $stmt3->execute(array($codProd));**/
+             * $stmt3 = $bd->prepare($sql3);
+             * $stmt3->execute(array($codProd));**/
 
             $stmt = $bd->query("Select stock, nombre from productos where codprod=$codProd");
             list($stock, $nombreproducto) = $stmt->fetch();
-            if ($stock<$unidades) {throw new PDOException("Producto con nombre $nombreproducto con stock menor del solicitado<br");}
+            if ($stock < $unidades) {
+                throw new PDOException("Producto con nombre $nombreproducto con stock menor del solicitado<br");
+            }
             $sql4 = "UPDATE productos set stock=? where codProd=?";
             $stmt = $bd->prepare($sql4);
             $stock -= $unidades;
             $stmt->execute(array($stock, $codProd));
-            
+
             $sql2 = "insert into pedidosproductos(CodPed, CodProd, Unidades) 
 		             values( ?, ?, ?)";
             $stmt = $bd->prepare($sql2);
@@ -223,5 +235,5 @@ function insertar_pedido($carrito, $codRes) {
         return FALSE;
     } finally {
         unset($bd);
-       }
+    }
 }

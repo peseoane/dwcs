@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS `pedidos`;
 CREATE DATABASE IF NOT EXISTS `pedidos` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `pedidos`;
 

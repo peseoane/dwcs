@@ -7,7 +7,11 @@ function comprobar_sesion() {
      * Si no es así, indica que el usuario no ha hecho login correctamente y por tanto
      * lo redirige al formulario del login
      */
-    session_start();
+
+    /// check if the user has logged in
+
+session_start();
+
     if (!isset($_SESSION['usuario'])) {
         header("Location: login.php?redirigido=true");
     }
