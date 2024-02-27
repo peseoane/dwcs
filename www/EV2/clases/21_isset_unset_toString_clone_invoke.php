@@ -14,26 +14,28 @@
  * El método mágico __invoke() se dispara cuando utilizamos un objeto como una función
  */
 
-class Usuario {
+class Usuario
+{
     /*
      * Contador va a ser una variable de clase (estática) porque queremos saber el 
      * número de individuos que hay de esa clase y esta variable estática se irá asignando 
      * como identificador cada vez que se cree un objeto o se clone
      */
 
-    static private $contador = 0;
-    private $id;
-    private $salario;
+    static private int $contador = 0;
+    public array $info = [
+        'nombre' => '',
+        'edad'   => 0,
+    ];
+    private int $id;
     /*
      * La siguiente variable la declaro como pública para probar el comportamiento de 
      * __isset() pero debería ser private para encapsular
      */
-    public $info = [
-        'nombre' => '',
-        'edad' => 0,
-    ];
+    private int | float $salario;
 
-    public function __construct($salario = 0, $datos = ["", 0]) {
+    public function __construct($salario = 0, $datos = ["", 0])
+    {
         /*
          * Las tres palabras claves especiales self, parent y static son utilizadas para 
          * acceder a propiedades y métodos desde el interior de la definición de la clase. 
@@ -44,11 +46,13 @@ class Usuario {
         $this->info['edad'] = $datos[1];
     }
 
-    public function __clone() {
+    public function __clone()
+    {
         $this->id = self::$contador++;
     }
 
-    public function __isset($nombre) {
+    public function __isset($nombre)
+    {
         $devol = false;
         if (array_key_exists($nombre, $this->info)) {
             if ($this->info[$nombre] != "")
@@ -57,7 +61,8 @@ class Usuario {
         return $devol;
     }
 
-    public function __unset($campo) {
+    public function __unset($campo)
+    {
         unset($this->info[$campo]);
     }
 
@@ -66,20 +71,18 @@ class Usuario {
      * conviene implementar el método mágico __toString()
      */
 
-    public function __toString() {
-        return "<br>El usuario con id: " . $this->id . " y nombre: " .
-                $this->info['nombre'] . " con " . $this->info['edad'] . " años, salario " .
-                $this->salario . "<br>";
-        ;
+    public function __toString()
+    {
+        return "<br>El usuario con id: " . $this->id . " y nombre: " . $this->info['nombre'] . " con " . $this->info['edad'] . " años, salario " . $this->salario . "<br>";
     }
 
-    public function __invoke($salario, $nombre, $edad) {
+    public function __invoke($salario, $nombre, $edad)
+    {
         //No puedo llamar al constructor porque modificaría el id y el contador
         $this->salario = $salario;
         $this->info['nombre'] = $nombre;
         $this->info['edad'] = $edad;
     }
-
 }
 
 $salario = 35000;
@@ -125,6 +128,5 @@ var_dump($persona1);
 unset($persona1->edad);
 //No existe la siguiente propiedad y no hace nada
 unset($persona1->incentivos);
-echo "<b>Tras borrar la edad y e intentar borrar incentivos del primer usuario "
- . "creado tenemos el siguiente objeto</b>";
+echo "<b>Tras borrar la edad y e intentar borrar incentivos del primer usuario " . "creado tenemos el siguiente objeto</b>";
 var_dump($persona1);

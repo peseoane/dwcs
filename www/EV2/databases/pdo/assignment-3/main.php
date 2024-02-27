@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $actualPage = $_GET["page"] ?? 1;
 }
 
-$myBooks->setCurrentPage((int) $actualPage);
+$myBooks->setCurrentPage((int)$actualPage);
 $myBooks->setFilter($filterTitle);
 $myBooks->sortByColumn($sortByColumn);
 $myBooks->defineSort($sortDirection);
@@ -28,39 +28,39 @@ $myBooks->build();
 
 $bookKeys = $myBooks->getTable()->getHeaders();
 $options = [
-    "filterTitle" => [
-        "type" => "text",
+    "filterTitle"   => [
+        "type"  => "text",
         "value" => "",
     ],
-    "sortByColumn" => [
-        "type" => "select",
-        "value" => "",
+    "sortByColumn"  => [
+        "type"    => "select",
+        "value"   => "",
         "options" => array_combine($bookKeys, $bookKeys),
     ],
     "sortDirection" => [
-        "type" => "select",
-        "value" => "",
+        "type"    => "select",
+        "value"   => "",
         "options" => [
-            "ASC" => "Ascendente",
+            "ASC"  => "Ascendente",
             "DESC" => "Descendente",
         ],
     ],
-    "submit" => [
-        "type" => "submit",
+    "submit"        => [
+        "type"  => "submit",
         "value" => "Filtrar",
     ],
 ];
 $myForm = new Form($options);
 ?>
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Books</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Books</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
 <?php
 echo $myForm->render();
 echo $myBooks->renderHtml();

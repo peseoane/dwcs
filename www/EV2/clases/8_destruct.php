@@ -6,9 +6,11 @@
  * un disparador implícito para que PHP ejecute el método __destruct() del objeto 
  */
 
-class Usuario {
+class Usuario
+{
 
-    public function __destruct() {
+    public function __destruct()
+    {
         echo 'He llamado al método __destruct()';
     }
 
