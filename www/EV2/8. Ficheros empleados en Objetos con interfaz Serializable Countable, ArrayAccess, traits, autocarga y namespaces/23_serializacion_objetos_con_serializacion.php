@@ -1,5 +1,5 @@
 <?php
-
+echo phpinfo();
 /*
  * Ejemplo de serialización de un objeto Profesor, que contiene un array de objetos
  * bailes. Incluye herencia, namespaces, autocarga, traits, utilización de las interfaces 
@@ -25,6 +25,8 @@ $profe->anhadeBaile("Rock");
 $profe[] = "Tango";
 //Esta tampoco la introduce por estar repetida
 $profe->offsetSet("", "Tango");
+
+var_dump($profe);
 
 echo "<br>Usando la interfaz Countable, puedo indicar el nº bailes que imparte el profesor, siendo " .
  $profe->count() . " bailes, con una duración total de " . $profe::duracion * $profe->count() . " minutos";
