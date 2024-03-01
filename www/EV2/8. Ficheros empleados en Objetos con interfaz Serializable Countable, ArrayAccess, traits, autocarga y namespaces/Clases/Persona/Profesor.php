@@ -15,6 +15,7 @@ use Interfaz\Comparar; //No olvidarse de incluir la interfaz
 
 class Profesor extends person implements \ArrayAccess, Contar, Comparar {
 
+
     private $nif;
     //Array con los bailes que imparte un profesor, que son objetos de tipo Baile
     private $coleccionBailes = array();
@@ -24,7 +25,8 @@ class Profesor extends person implements \ArrayAccess, Contar, Comparar {
         parent::__construct($nombre, $apellidos, $movil);
     }
 
-    function anhadeBaile($nombre_baile, $edad = 8) {
+    function anhadeBaile($nombre_baile, $edad = 8): void
+    {
         /* Antes de añadir un baile a un profesor veo si ya está en la lista de bailes 
          * que imparte. Si es así, no lo introduce aunque la edad mínima sea distinta
          * de la ya guardada

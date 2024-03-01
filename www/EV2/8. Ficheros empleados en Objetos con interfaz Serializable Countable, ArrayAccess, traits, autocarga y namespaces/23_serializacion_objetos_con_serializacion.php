@@ -1,5 +1,4 @@
 <?php
-echo phpinfo();
 /*
  * Ejemplo de serialización de un objeto Profesor, que contiene un array de objetos
  * bailes. Incluye herencia, namespaces, autocarga, traits, utilización de las interfaces 
@@ -38,9 +37,13 @@ echo " y tiene " . $alumno->count_apellidos() . " apellidos<br>";
 echo '<br><br><b>INFORMACIÓN DEL PROFESOR</b><br>';
 var_dump($profe);
 
+
 echo '<br><br><b>INFORMACIÓN DEL PROFESOR SERIALIZADA</b><br>';
 $aux = serialize($profe);
 var_dump($aux);
+// show as gzip the serialized object
+echo '<br><br><b>INFORMACIÓN DEL PROFESOR SERIALIZADA Y COMPRIMIDA</b><br>';
+var_dump(gzcompress($aux));
 
 echo "<br><b>TRAS LA DESERIALIZACIÓN</b><br>";
 $prof_nuevo = unserialize($aux);

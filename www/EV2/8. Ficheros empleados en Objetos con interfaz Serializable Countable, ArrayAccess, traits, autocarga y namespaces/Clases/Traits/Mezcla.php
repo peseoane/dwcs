@@ -8,11 +8,13 @@ namespace Traits;
 
 trait Mezcla {
 
-    function creacion($msg) {
+    function creacion($msg): string
+    {
         return $msg . date('d-m-Y h:i:s');
     }
 
-    function count_apellidos() {
+    function count_apellidos(): int
+    {
         $array = explode(" ", $this->apellidos);
         return count($array);
     }
