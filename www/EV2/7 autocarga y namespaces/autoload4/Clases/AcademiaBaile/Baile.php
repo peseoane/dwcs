@@ -12,7 +12,7 @@ class Baile {
     private $nombre;
     private $edadMinima;
 
-    function __construct($nombre, $edadMinima = 8) {
+    function __construct(string $nombre, int $edadMinima = 8) {
         $this->nombre = $nombre;
         $this->edadMinima = $edadMinima;
     }
