@@ -51,6 +51,12 @@ $options = [
     ],
 ];
 $myForm = new Form($options);
+
+// read from session the resultObj
+if (isset($_SESSION["resultObj"])) {
+  var_dump($_SESSION["resultObj"]);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

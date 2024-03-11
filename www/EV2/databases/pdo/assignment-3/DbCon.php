@@ -24,7 +24,7 @@ class DbCon
         $this->configFilePath = ".db";
         $db_config = $this->getDataFromConfigFile($this->configFilePath);
         $this->MYSQL_USER = $db_config["MYSQL_USER"];
-        $this->MYSQL_ROOT_PASSWORD = $db_config["MYSQL_ROOT_PASSWORD"];
+        $this->MYSQL_ROOT_PASSWORD = "root";
         $this->MYSQL_HOST = $db_config["MYSQL_HOST"];
         $this->MYSQL_DB = $db_config["MYSQL_DB"];
         $this->MYSQL_DSN = "mysql:host=" . $this->MYSQL_HOST . ";dbname=" . $this->MYSQL_DB;
@@ -59,6 +59,12 @@ class DbCon
             $stmt = $this->getPdo()->prepare($SQLSentence);
             $stmt->execute($params);
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->execute($params);
+            $resultObj = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            // add the resultObj to be stored in the session
+            $_SESSION['resultObj'] = $resultObj;
+
             error_log("Query executed successfully: " . $SQLSentence);
         } catch (PDOException $e) {
             echo "Query failed: " . $e->getMessage();
@@ -66,6 +72,7 @@ class DbCon
             return [
 
             ];
+        } catch (ReflectionException $e) {
         } finally {
             return $result;
         }
