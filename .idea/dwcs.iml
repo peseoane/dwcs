@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/www/EV1/examenDiciembre/hotfix" isTestSource="false" packagePrefix="App" />
+      <sourceFolder url="file://$MODULE_DIR$/www/FINAL_EX_2" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/www/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/www/vendor/ycms/krumo" />
       <excludeFolder url="file://$MODULE_DIR$/www/vendor/phpmailer/phpmailer" />

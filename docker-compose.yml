@@ -23,12 +23,15 @@ services:
     image: mysql:latest
     volumes:
       - dwcs-db:/var/lib/mysql
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: "root"
       MYSQL_DATABASE: dwcs
+      TZ: "Europe/Madrid"
     networks:
       - dwcsLan
       - dwcs
