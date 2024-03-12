@@ -1,7 +1,6 @@
 <?php
 
 include_once 'Autoload.php';
-
 use Database\SqlBuilder;
 
 $builder = SqlBuilder::getInstance();

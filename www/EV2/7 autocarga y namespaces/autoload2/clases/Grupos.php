@@ -4,6 +4,7 @@ class Grupos extends Base {
 
     protected $web;
 
+
     public function __construct($nom, $nif, $direc, $web) {
 
         parent::__construct($nom, $nif, $direc);

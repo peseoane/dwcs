@@ -21,5 +21,5 @@ class Clase {
 
 }
 
-$a = new Clase();
+$a = new Cursos();
 $a->metodoQueNoExiste(TRUE, 'dato', 23);

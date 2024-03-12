@@ -10,6 +10,7 @@ class Saludar {
 
 class Redefir_saludar extends Saludar {
 
+    [#override]
     function saluda() {
         return "<br>Quiero redefinir este método pero no va a ser posible porque saldrá un error fatal";
     }

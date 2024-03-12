@@ -20,13 +20,13 @@ services:
 
   mysql:
     container_name: dwcs-mysql
-    image: mysql:latest
+    image: mysql:8.3.0
     volumes:
       - dwcs-db:/var/lib/mysql
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - "3307:3306"
+      - "3306:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: "root"
@@ -36,21 +36,21 @@ services:
       - dwcsLan
       - dwcs
 
-#  phpmyadmin:
-#    container_name: dwcs-phpmyadmin
-#    image: phpmyadmin/phpmyadmin:latest
-#    hostname: phpmyadmin
-#    ports:
-#      - "8082:80"
-#    environment:
-#      PMA_HOST: mysql
-#      PMA_PORT: 3306
-#      MYSQL_ROOT_PASSWORD: root
-#      MYSQL_DATABASE: dwcs
-#
-#    networks:
-#      - dwcsLan
-#      - dwcs
+  phpmyadmin:
+    container_name: dwcs-phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.2.1-fpm-alpine
+    hostname: phpmyadmin
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dwcs
+
+    networks:
+      - dwcsLan
+      - dwcs
 
 #  php7:
 #    container_name: dwcs-php7
